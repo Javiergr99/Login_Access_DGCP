@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="600" viewBox="0 0 1400 600" role="img" aria-labelledby="title desc">
+  <title id="title">Mapa de código de Mesa de Ayuda 2.0</title>
+  <desc id="desc">Organización visual de app, components, features y shared.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08111f"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="root" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".30"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="600" rx="26" fill="url(#bg)"/>
+
+  <text x="58" y="66" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif"
+        font-size="30" font-weight="800">Mapa del código</text>
+  <text x="58" y="98" fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif"
+        font-size="15">Arquitectura modular por funcionalidades</text>
+
+  <g filter="url(#shadow)">
+    <rect x="550" y="126" width="300" height="82" rx="22" fill="url(#root)"/>
+    <text x="700" y="162" text-anchor="middle" fill="#fff"
+          font-family="Inter,Segoe UI,Arial,sans-serif" font-size="22" font-weight="800">src/</text>
+    <text x="700" y="186" text-anchor="middle" fill="#cffafe"
+          font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">frontend operativo</text>
+  </g>
+
+  <path d="M700 208V244" stroke="#475569" stroke-width="2"/>
+  <path d="M175 244H1225" stroke="#475569" stroke-width="2"/>
+  <path d="M175 244V276M525 244V276M875 244V276M1225 244V276"
+        stroke="#475569" stroke-width="2"/>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <g>
+      <rect x="55" y="276" width="240" height="218" rx="20" fill="#111c2d" stroke="#3f3a66"/>
+      <circle cx="84" cy="309" r="8" fill="#a78bfa"/>
+      <text x="104" y="315" fill="#fff" font-size="18" font-weight="800">app/</text>
+      <text x="76" y="351" fill="#cbd5e1" font-size="13">Composición global</text>
+      <text x="76" y="379" fill="#94a3b8" font-size="12">• providers</text>
+      <text x="76" y="403" fill="#94a3b8" font-size="12">• router</text>
+      <text x="76" y="427" fill="#94a3b8" font-size="12">• estilos y tokens</text>
+      <text x="76" y="451" fill="#94a3b8" font-size="12">• bootstrap</text>
+    </g>
+
+    <g>
+      <rect x="405" y="276" width="240" height="218" rx="20" fill="#111c2d" stroke="#5e4623"/>
+      <circle cx="434" cy="309" r="8" fill="#f59e0b"/>
+      <text x="454" y="315" fill="#fff" font-size="18" font-weight="800">components/</text>
+      <text x="426" y="351" fill="#cbd5e1" font-size="13">UI reutilizable</text>
+      <text x="426" y="379" fill="#94a3b8" font-size="12">• layout</text>
+      <text x="426" y="403" fill="#94a3b8" font-size="12">• ui primitives</text>
+      <text x="426" y="427" fill="#94a3b8" font-size="12">• navegación</text>
+      <text x="426" y="451" fill="#94a3b8" font-size="12">• composición visual</text>
+    </g>
+
+    <g>
+      <rect x="755" y="276" width="240" height="218" rx="20" fill="#111c2d" stroke="#285646"/>
+      <circle cx="784" cy="309" r="8" fill="#34d399"/>
+      <text x="804" y="315" fill="#fff" font-size="18" font-weight="800">features/</text>
+      <text x="776" y="351" fill="#cbd5e1" font-size="13">Dominios funcionales</text>
+      <text x="776" y="379" fill="#94a3b8" font-size="12">• dashboard</text>
+      <text x="776" y="403" fill="#94a3b8" font-size="12">• attentions / tracking</text>
+      <text x="776" y="427" fill="#94a3b8" font-size="12">• organizer</text>
+      <text x="776" y="451" fill="#94a3b8" font-size="12">• auth / profile</text>
+    </g>
+
+    <g>
+      <rect x="1105" y="276" width="240" height="218" rx="20" fill="#111c2d" stroke="#28415f"/>
+      <circle cx="1134" cy="309" r="8" fill="#22d3ee"/>
+      <text x="1154" y="315" fill="#fff" font-size="18" font-weight="800">shared/</text>
+      <text x="1126" y="351" fill="#cbd5e1" font-size="13">Infraestructura común</text>
+      <text x="1126" y="379" fill="#94a3b8" font-size="12">• api y config</text>
+      <text x="1126" y="403" fill="#94a3b8" font-size="12">• catalogs y files</text>
+      <text x="1126" y="427" fill="#94a3b8" font-size="12">• permissions</text>
+      <text x="1126" y="451" fill="#94a3b8" font-size="12">• lib y navigation</text>
+    </g>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="700">
+    <rect x="355" y="530" width="160" height="32" rx="16" fill="#0f2435" stroke="#164e63"/>
+    <text x="435" y="551" text-anchor="middle" fill="#67e8f9">REUTILIZACIÓN</text>
+
+    <rect x="535" y="530" width="160" height="32" rx="16" fill="#1f1837" stroke="#5b4ca0"/>
+    <text x="615" y="551" text-anchor="middle" fill="#c4b5fd">TIPADO</text>
+
+    <rect x="715" y="530" width="160" height="32" rx="16" fill="#10291f" stroke="#236345"/>
+    <text x="795" y="551" text-anchor="middle" fill="#6ee7b7">TESTABILIDAD</text>
+
+    <rect x="895" y="530" width="160" height="32" rx="16" fill="#3a2710" stroke="#7c5417"/>
+    <text x="975" y="551" text-anchor="middle" fill="#fbbf24">ESCALABILIDAD</text>
+  </g>
+</svg>
