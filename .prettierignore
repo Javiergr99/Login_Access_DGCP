@@ -1,0 +1,7 @@
+dist
+coverage
+.vite
+test-results
+playwright-report
+playwright-report-real
+node_modules

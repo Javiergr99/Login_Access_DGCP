@@ -1,0 +1,105 @@
+.text-page-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-page-title);
+  line-height: 2rem;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.text-section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-section-title);
+  line-height: 1.5rem;
+}
+
+.text-card-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-card-title);
+  line-height: 1.5rem;
+}
+
+.text-auth-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-page-title);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.text-body {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-normal);
+}
+
+.text-body-sm {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-normal);
+}
+
+.text-body-muted {
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-normal);
+}
+
+.text-label {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-label);
+  line-height: var(--line-height-normal);
+}
+
+.text-caption {
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-normal);
+}
+
+.font-button {
+  font-weight: var(--font-weight-button);
+}
+
+.font-label-token {
+  font-weight: var(--font-weight-label);
+}
+
+.font-semibold-token {
+  font-weight: var(--font-weight-semibold);
+}
+
+.font-bold-token {
+  font-weight: var(--font-weight-bold);
+}
+
+.font-mono-token {
+  font-family: var(--font-family-monospace);
+}
+
+.font-medium-token {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-extrabold-token {
+  font-weight: var(--font-weight-extrabold);
+}

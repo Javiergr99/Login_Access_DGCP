@@ -1,0 +1,171 @@
+:root {
+  /* ======================================================
+     PALETA PRIMITIVA
+     Valores base. Los componentes no deben consumirlos
+     directamente: deben usar los tokens semánticos.
+     ====================================================== */
+
+  --palette-white: #ffffff;
+  --palette-black: #000000;
+
+  --palette-slate-25: #fcfdff;
+  --palette-slate-50: #f8fafc;
+  --palette-slate-100: #f1f5f9;
+  --palette-slate-200: #e2e8f0;
+  --palette-slate-300: #cbd5e1;
+  --palette-slate-400: #94a3b8;
+  --palette-slate-500: #64748b;
+  --palette-slate-600: #475569;
+  --palette-slate-700: #334155;
+  --palette-slate-800: #1e293b;
+  --palette-slate-900: #0f172a;
+  --palette-slate-950: #020617;
+
+  --palette-blue-50: #eff6ff;
+  --palette-blue-100: #dbeafe;
+  --palette-blue-200: #bfdbfe;
+  --palette-blue-500: #3b82f6;
+  --palette-blue-600: #2563eb;
+  --palette-blue-700: #1d4ed8;
+  --palette-blue-800: #1e40af;
+  --palette-blue-950: #172554;
+
+  --palette-wine-50: #f8edf1;
+  --palette-wine-100: #f1dbe3;
+  --palette-wine-600: #76123a;
+  --palette-wine-700: #611232;
+  --palette-wine-800: #4f0e29;
+  --palette-wine-900: #3d0b20;
+
+  --palette-emerald-50: #ecfdf5;
+  --palette-emerald-200: #a7f3d0;
+  --palette-emerald-500: #10b981;
+  --palette-emerald-600: #059669;
+  --palette-emerald-700: #047857;
+  --palette-emerald-950: #022c22;
+
+  --palette-amber-50: #fffbeb;
+  --palette-amber-200: #fde68a;
+  --palette-amber-500: #f59e0b;
+  --palette-amber-600: #d97706;
+  --palette-amber-700: #b45309;
+  --palette-amber-950: #451a03;
+
+  --palette-violet-50: #f5f3ff;
+  --palette-violet-200: #ddd6fe;
+  --palette-violet-500: #8b5cf6;
+  --palette-violet-600: #7c3aed;
+  --palette-violet-700: #6d28d9;
+
+  --palette-red-50: #fef2f2;
+  --palette-red-200: #fecaca;
+  --palette-red-400: #f87171;
+  --palette-red-500: #ef4444;
+  --palette-red-600: #dc2626;
+  --palette-red-700: #b91c1c;
+  --palette-red-950: #450a0a;
+
+  /* ======================================================
+     TIPOGRAFÍA
+     ====================================================== */
+
+  --font-family-primary: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-family-institutional: "Noto Sans", Arial, sans-serif;
+  --font-family-monospace: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.625rem;
+  --font-size-4xl: 2.5rem;
+
+  --line-height-tight: 1.2;
+  --line-height-heading: 1.32;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.01em;
+
+  /* ======================================================
+     ESPACIADO, BORDES Y SOMBRAS
+     ====================================================== */
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-full: 9999px;
+
+  --border-width-default: 1px;
+  --border-width-focus: 2px;
+
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.08), 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-card: 0 8px 30px rgb(15 23 42 / 0.05);
+  --shadow-auth-card: 0 10px 30px rgb(15 23 42 / 0.055);
+  --shadow-access-card: 0 6px 20px rgb(15 23 42 / 0.025);
+  --shadow-card-hover: 0 12px 28px rgb(15 23 42 / 0.055);
+  --shadow-user-summary: 0 8px 24px rgb(15 23 42 / 0.035);
+  --shadow-modal: 0 24px 64px rgb(15 23 42 / 0.18);
+  --overlay-modal: rgb(2 6 23 / 0.28);
+
+  /* ======================================================
+     MOVIMIENTO Y CONTROLES
+     ====================================================== */
+
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+
+  --control-height-sm: 2.25rem;
+  --control-height-md: 2.5rem;
+  --control-height-lg: 2.75rem;
+  --control-height-xl: 3rem;
+
+  /* ======================================================
+     LAYOUT Y CAPAS
+     ====================================================== */
+
+  --header-height: 64px;
+  --content-max-width: 1248px;
+  --auth-card-max-width: 460px;
+
+  --z-header: 40;
+  --z-dropdown: 70;
+  --z-drawer: 80;
+  --z-modal: 100;
+  --z-toast: 120;
+
+  /* Gobierno de México. Son independientes del tema de la app. */
+  --gobmx-header-background: #621132;
+  --gobmx-footer-background: #611232;
+  --gobmx-foreground: #ffffff;
+  --gobmx-border: rgb(255 255 255 / 0.12);
+}

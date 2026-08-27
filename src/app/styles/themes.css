@@ -1,0 +1,253 @@
+/* =========================================================
+   TEMA PRIVADO: MESA DE AYUDA 2.0
+   Se usa en /accesos y en los módulos operativos.
+   ========================================================= */
+
+:root,
+[data-theme="mesa-ayuda"] {
+  --color-primary: var(--palette-blue-600);
+  --color-primary-hover: var(--palette-blue-700);
+  --color-primary-pressed: var(--palette-blue-800);
+  --color-primary-soft: var(--palette-blue-50);
+  --color-primary-foreground: var(--palette-white);
+
+  --color-secondary: var(--palette-violet-500);
+  --color-secondary-hover: var(--palette-violet-600);
+  --color-secondary-foreground: var(--palette-white);
+
+  --color-page-background: #f4f7fb;
+  --color-surface: var(--palette-white);
+  --color-surface-muted: var(--palette-slate-50);
+  --color-surface-subtle: var(--palette-slate-100);
+
+  --color-text-primary: #111827;
+  --color-text-secondary: var(--palette-slate-500);
+  --color-text-muted: var(--palette-slate-400);
+  --color-text-disabled: var(--palette-slate-400);
+  --color-text-inverse: var(--palette-white);
+
+  --color-border: #dce3ec;
+  --color-border-subtle: var(--palette-slate-100);
+  --color-border-hover: var(--palette-slate-300);
+  --color-border-focus: var(--palette-blue-600);
+
+  --color-focus-ring: rgb(37 99 235 / 0.22);
+  --color-selection-background: var(--palette-blue-200);
+  --color-selection-text: var(--palette-blue-950);
+
+  --color-success: var(--palette-emerald-500);
+  --color-success-hover: var(--palette-emerald-600);
+  --color-success-soft: var(--palette-emerald-50);
+  --color-success-foreground: var(--palette-emerald-950);
+
+  --color-warning: var(--palette-amber-500);
+  --color-warning-hover: var(--palette-amber-600);
+  --color-warning-soft: var(--palette-amber-50);
+  --color-warning-foreground: var(--palette-amber-950);
+
+  --color-error: var(--palette-red-600);
+  --color-error-hover: var(--palette-red-700);
+  --color-error-soft: var(--palette-red-50);
+  --color-error-foreground: var(--palette-red-950);
+
+  --color-info: var(--palette-blue-600);
+  --color-info-soft: var(--palette-blue-50);
+  --color-info-foreground: var(--palette-blue-950);
+
+  --font-weight-page-title: var(--font-weight-bold);
+  --font-weight-section-title: var(--font-weight-bold);
+  --font-weight-card-title: var(--font-weight-bold);
+  --font-weight-body: var(--font-weight-regular);
+  --font-weight-label: var(--font-weight-semibold);
+  --font-weight-button: var(--font-weight-semibold);
+
+  --accent-color: var(--color-primary);
+  --accent-color-hover: var(--color-primary-hover);
+  --accent-color-soft: var(--color-primary-soft);
+  --accent-color-border: var(--palette-blue-200);
+  --accent-color-decoration: var(--palette-blue-200);
+
+  --avatar-fallback-start: var(--palette-amber-50);
+  --avatar-fallback-end: var(--palette-blue-100);
+  --avatar-fallback-foreground: var(--palette-slate-700);
+  --avatar-ring: var(--palette-white);
+}
+
+/* =========================================================
+   TEMA PÚBLICO: AUTENTICACIÓN
+   Se usa en login, recuperación, 2FA y acceso correcto.
+   Cambiar aquí modifica todas las acciones principales del flujo.
+   ========================================================= */
+
+[data-theme="auth"] {
+  --color-primary: var(--palette-wine-600);
+  --color-primary-hover: var(--palette-wine-700);
+  --color-primary-pressed: var(--palette-wine-800);
+  --color-primary-soft: var(--palette-wine-50);
+  --color-primary-foreground: var(--palette-white);
+
+  --color-secondary: #bc955c;
+  --color-secondary-hover: #a9824e;
+  --color-secondary-foreground: var(--palette-white);
+
+  --color-page-background: var(--palette-slate-50);
+  --color-surface: var(--palette-white);
+  --color-surface-muted: #f5f7fa;
+  --color-surface-subtle: var(--palette-slate-100);
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #708198;
+  --color-text-muted: #9babc0;
+  --color-text-disabled: var(--palette-slate-400);
+  --color-text-inverse: var(--palette-white);
+
+  --color-border: #d8e0ea;
+  --color-border-subtle: #edf1f5;
+  --color-border-hover: #c7d2df;
+  --color-border-focus: var(--palette-wine-600);
+
+  --color-focus-ring: rgb(118 18 58 / 0.14);
+  --color-selection-background: var(--palette-wine-100);
+  --color-selection-text: var(--palette-wine-900);
+
+  --color-success: var(--palette-emerald-500);
+  --color-success-hover: var(--palette-emerald-600);
+  --color-success-soft: var(--palette-emerald-50);
+  --color-success-foreground: var(--palette-emerald-950);
+
+  --color-warning: var(--palette-amber-500);
+  --color-warning-hover: var(--palette-amber-600);
+  --color-warning-soft: var(--palette-amber-50);
+  --color-warning-foreground: var(--palette-amber-950);
+
+  --color-error: var(--palette-red-600);
+  --color-error-hover: var(--palette-red-700);
+  --color-error-soft: var(--palette-red-50);
+  --color-error-foreground: var(--palette-red-950);
+
+  --color-info: var(--palette-blue-600);
+  --color-info-soft: var(--palette-blue-50);
+  --color-info-foreground: var(--palette-blue-950);
+
+  --font-weight-page-title: var(--font-weight-bold);
+  --font-weight-section-title: var(--font-weight-bold);
+  --font-weight-card-title: var(--font-weight-bold);
+  --font-weight-body: var(--font-weight-regular);
+  --font-weight-label: var(--font-weight-semibold);
+  --font-weight-button: var(--font-weight-semibold);
+
+  --accent-color: var(--color-primary);
+  --accent-color-hover: var(--color-primary-hover);
+  --accent-color-soft: var(--color-primary-soft);
+  --accent-color-border: var(--palette-wine-100);
+  --accent-color-decoration: var(--palette-wine-100);
+
+  --avatar-fallback-start: var(--palette-amber-50);
+  --avatar-fallback-end: var(--palette-blue-100);
+  --avatar-fallback-foreground: var(--palette-slate-700);
+  --avatar-ring: var(--palette-white);
+}
+
+/* =========================================================
+   TONOS DE TARJETAS DE ACCESO
+   Los componentes consumen las mismas variables y solo cambian
+   la clase de tono. Todos los valores se administran aquí.
+   ========================================================= */
+
+.access-tone-blue {
+  --accent-color: var(--palette-blue-600);
+  --accent-color-hover: var(--palette-blue-700);
+  --accent-color-soft: var(--palette-blue-50);
+  --accent-color-border: var(--palette-blue-200);
+  --accent-color-decoration: var(--palette-blue-200);
+}
+
+.access-tone-violet {
+  --accent-color: var(--palette-violet-500);
+  --accent-color-hover: var(--palette-violet-600);
+  --accent-color-soft: var(--palette-violet-50);
+  --accent-color-border: var(--palette-violet-200);
+  --accent-color-decoration: var(--palette-violet-200);
+}
+
+.access-tone-emerald {
+  --accent-color: #0f9b8e;
+  --accent-color-hover: #0f766e;
+  --accent-color-soft: var(--palette-emerald-50);
+  --accent-color-border: var(--palette-emerald-200);
+  --accent-color-decoration: var(--palette-emerald-200);
+}
+
+.access-tone-amber {
+  --accent-color: #e47b00;
+  --accent-color-hover: #c76a00;
+  --accent-color-soft: var(--palette-amber-50);
+  --accent-color-border: var(--palette-amber-200);
+  --accent-color-decoration: var(--palette-amber-200);
+}
+
+/* =========================================================
+   TONOS DE ESTADO
+   ========================================================= */
+
+.status-tone-info {
+  --status-background: var(--color-info-soft);
+  --status-border: var(--palette-blue-200);
+  --status-foreground: var(--color-info-foreground);
+  --status-icon: var(--color-info);
+}
+
+.status-tone-success {
+  --status-background: var(--color-success-soft);
+  --status-border: var(--palette-emerald-200);
+  --status-foreground: var(--color-success-foreground);
+  --status-icon: var(--color-success);
+}
+
+.status-tone-warning {
+  --status-background: var(--color-warning-soft);
+  --status-border: var(--palette-amber-200);
+  --status-foreground: var(--color-warning-foreground);
+  --status-icon: var(--color-warning);
+}
+
+.status-tone-error {
+  --status-background: var(--color-error-soft);
+  --status-border: var(--palette-red-200);
+  --status-foreground: var(--color-error-foreground);
+  --status-icon: var(--color-error);
+}
+
+/* =========================================================
+   TONOS GENÉRICOS DE BADGE
+   ========================================================= */
+
+.badge-tone-blue {
+  --badge-background: var(--palette-blue-50);
+  --badge-foreground: var(--palette-blue-700);
+}
+
+.badge-tone-green {
+  --badge-background: var(--palette-emerald-50);
+  --badge-foreground: var(--palette-emerald-700);
+}
+
+.badge-tone-amber {
+  --badge-background: var(--palette-amber-50);
+  --badge-foreground: var(--palette-amber-700);
+}
+
+.badge-tone-violet {
+  --badge-background: var(--palette-violet-50);
+  --badge-foreground: var(--palette-violet-700);
+}
+
+.badge-tone-red {
+  --badge-background: var(--palette-red-50);
+  --badge-foreground: var(--palette-red-700);
+}
+
+.badge-tone-slate {
+  --badge-background: var(--palette-slate-100);
+  --badge-foreground: var(--palette-slate-600);
+}

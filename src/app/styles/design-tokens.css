@@ -1,0 +1,45 @@
+:root {
+  /* Mismo sistema cromático de Mesa de Ayuda 2.0. */
+  --nna-primary: #2563eb;
+  --nna-primary-hover: #1d4ed8;
+  --nna-primary-active: #1e40af;
+  --nna-primary-soft: #eff6ff;
+  --nna-primary-muted: #dbeafe;
+  --nna-secondary: #6366f1;
+  --nna-accent: #f59e0b;
+  --nna-info: #3b82f6;
+
+  --nna-success: #10b981;
+  --nna-success-soft: #ecfdf5;
+  --nna-warning: #f59e0b;
+  --nna-warning-soft: #fffbeb;
+  --nna-danger: #ef4444;
+  --nna-danger-soft: #fef2f2;
+
+  --nna-canvas: #f4f7fb;
+  --nna-surface: #ffffff;
+  --nna-header: #ffffff;
+  --nna-sidebar: #0f1a31;
+  --nna-field-bg: #ffffff;
+
+  --nna-text-primary: #111827;
+  --nna-text-secondary: #64748b;
+  --nna-text-muted: #94a3b8;
+  --nna-border: #dce3ec;
+  --nna-border-strong: #cbd5e1;
+
+  --nna-font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  --nna-card-radius: 12px;
+  --nna-control-radius: 8px;
+  --nna-card-shadow: 0 1px 2px rgb(15 23 42 / 0.03);
+  --nna-focus-ring: rgb(37 99 235 / 0.22);
+
+  --nna-header-height: 64px;
+  --nna-sidebar-collapsed-width: 56px;
+  --nna-sidebar-expanded-width: 224px;
+  --nna-sidebar-current-width: var(--nna-sidebar-collapsed-width);
+  --nna-content-max: 1260px;
+
+  --nna-sidebar-text: #94a3b8;
+  --nna-sidebar-text-hover: #e2e8f0;
+}
