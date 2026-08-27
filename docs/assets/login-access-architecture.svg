@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="620" viewBox="0 0 1400 620" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitectura de Login Access</title>
+  <desc id="desc">Flujo desde el usuario hacia Login Access, auth_service y los frontends autorizados del Ecosistema Integral DGCP.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#090f1a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="login" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="service" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="620" rx="26" fill="url(#bg)"/>
+
+  <text x="58" y="68" fill="#ffffff" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="30" font-weight="800">Arquitectura</text>
+  <text x="58" y="100" fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="15">Autenticación, permisos y distribución hacia frontends independientes</text>
+  <line x1="58" y1="124" x2="1342" y2="124" stroke="#334155"/>
+
+  <!-- Usuario -->
+  <g filter="url(#shadow)">
+    <rect x="62" y="245" width="150" height="76" rx="16" fill="#151e2d" stroke="#475569"/>
+    <circle cx="102" cy="283" r="16" fill="#1e293b" stroke="#64748b"/>
+    <circle cx="102" cy="277" r="6" fill="#cbd5e1"/>
+    <path d="M91 295c3-8 19-8 22 0" fill="none" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+    <text x="132" y="290" fill="#ffffff" font-family="Inter,Segoe UI,Arial,sans-serif"
+      font-size="16" font-weight="700">Usuario</text>
+  </g>
+
+  <!-- Login Access -->
+  <g filter="url(#shadow)">
+    <rect x="310" y="212" width="245" height="142" rx="22" fill="url(#login)"/>
+    <rect x="330" y="233" width="44" height="44" rx="12" fill="#ffffff" fill-opacity=".14"/>
+    <path d="M352 243l11 4v7c0 7-4.6 13-11 15-6.4-2-11-8-11-15v-7l11-4z"
+      fill="none" stroke="#fff" stroke-width="2.5"/>
+    <text x="392" y="253" fill="#ffffff" font-family="Inter,Segoe UI,Arial,sans-serif"
+      font-size="20" font-weight="800">Login Access</text>
+    <text x="392" y="277" fill="#e0e7ff" font-family="Inter,Segoe UI,Arial,sans-serif"
+      font-size="13">:5174</text>
+    <text x="330" y="312" fill="#eef2ff" font-family="Inter,Segoe UI,Arial,sans-serif"
+      font-size="13">Login · MFA · permisos · redirect-code</text>
+    <text x="330" y="334" fill="#dbeafe" font-family="Inter,Segoe UI,Arial,sans-serif"
+      font-size="12">Punto central de entrada</text>
+  </g>
+
+  <!-- auth_service -->
+  <g filter="url(#shadow)">
+    <rect x="330" y="430" width="205" height="92" rx="20" fill="url(#service)"/>
+    <text x="432" y="466" text-anchor="middle" fill="#ffffff"
+      font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">auth_service</text>
+    <text x="432" y="491" text-anchor="middle" fill="#cffafe"
+      font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">:8001 · identidad y autorización</text>
+  </g>
+
+  <!-- Frontends -->
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <g>
+      <rect x="790" y="154" width="270" height="66" rx="16" fill="#151e2d" stroke="#334155"/>
+      <circle cx="818" cy="187" r="7" fill="#22d3ee"/>
+      <text x="840" y="183" fill="#ffffff" font-size="15" font-weight="700">Mesa de Ayuda</text>
+      <text x="840" y="202" fill="#94a3b8" font-size="12">:5173 · /app/dashboard</text>
+    </g>
+
+    <g>
+      <rect x="790" y="236" width="270" height="66" rx="16" fill="#151e2d" stroke="#334155"/>
+      <circle cx="818" cy="269" r="7" fill="#34d399"/>
+      <text x="840" y="265" fill="#ffffff" font-size="15" font-weight="700">Formato NNA</text>
+      <text x="840" y="284" fill="#94a3b8" font-size="12">:5175 · /app/dashboard</text>
+    </g>
+
+    <g>
+      <rect x="790" y="318" width="270" height="66" rx="16" fill="#151e2d" stroke="#334155"/>
+      <circle cx="818" cy="351" r="7" fill="#c4b5fd"/>
+      <text x="840" y="347" fill="#ffffff" font-size="15" font-weight="700">Directorio Procuradores</text>
+      <text x="840" y="366" fill="#94a3b8" font-size="12">:5177 · /procuradores</text>
+    </g>
+
+    <g>
+      <rect x="790" y="400" width="270" height="66" rx="16" fill="#151e2d" stroke="#334155"/>
+      <circle cx="818" cy="433" r="7" fill="#f59e0b"/>
+      <text x="840" y="429" fill="#ffffff" font-size="15" font-weight="700">Agenda Nacional</text>
+      <text x="840" y="448" fill="#94a3b8" font-size="12">:5179 · /app/dashboard</text>
+    </g>
+
+    <g>
+      <rect x="790" y="482" width="270" height="66" rx="16" fill="#151e2d" stroke="#334155"/>
+      <circle cx="818" cy="515" r="7" fill="#fb7185"/>
+      <text x="840" y="511" fill="#ffffff" font-size="15" font-weight="700">Configuración</text>
+      <text x="840" y="530" fill="#94a3b8" font-size="12">:5180 · /app/dashboard</text>
+    </g>
+  </g>
+
+  <!-- Conexiones -->
+  <path d="M212 283H310" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="260" y="266" text-anchor="middle" fill="#64748b"
+    font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">credenciales</text>
+
+  <path d="M432 354V430" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M462 430V354" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="486" y="399" fill="#67e8f9" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="12">sesión · /users/me</text>
+
+  <path d="M555 283H676" stroke="#a78bfa" stroke-width="2"/>
+  <path d="M676 187V515" stroke="#475569" stroke-width="2"/>
+
+  <path d="M676 187H790" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M676 269H790" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M676 351H790" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M676 433H790" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M676 515H790" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="579" y="254" width="117" height="30" rx="15" fill="#211b36" stroke="#6d5ac8"/>
+  <text x="637" y="274" text-anchor="middle" fill="#c4b5fd"
+    font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="700">redirect-code</text>
+
+  <!-- Nota -->
+  <rect x="1122" y="164" width="220" height="384" rx="20" fill="#0d1522" stroke="#273449"/>
+  <text x="1146" y="199" fill="#e2e8f0" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="15" font-weight="800">Principios</text>
+
+  <g fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">
+    <circle cx="1147" cy="231" r="4" fill="#22d3ee"/>
+    <text x="1161" y="235">Frontends independientes</text>
+
+    <circle cx="1147" cy="273" r="4" fill="#34d399"/>
+    <text x="1161" y="277">Permisos desde Backend</text>
+
+    <circle cx="1147" cy="315" r="4" fill="#c4b5fd"/>
+    <text x="1161" y="319">Redirect-code de entrada</text>
+
+    <circle cx="1147" cy="357" r="4" fill="#f59e0b"/>
+    <text x="1161" y="361">Access token en memoria</text>
+
+    <circle cx="1147" cy="399" r="4" fill="#fb7185"/>
+    <text x="1161" y="403">MFA / TOTP</text>
+  </g>
+
+  <line x1="1146" y1="440" x2="1318" y2="440" stroke="#273449"/>
+  <text x="1146" y="470" fill="#64748b" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="11">Pendiente contractual:</text>
+  <text x="1146" y="491" fill="#fbbf24" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="11" font-weight="700">refresh token → HttpOnly</text>
+  <text x="1146" y="510" fill="#64748b" font-family="Inter,Segoe UI,Arial,sans-serif"
+    font-size="11">cuando auth_service migre.</text>
+</svg>
