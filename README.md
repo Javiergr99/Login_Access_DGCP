@@ -3,9 +3,9 @@
 <div align="center">
 
 <img
-  src="./docs/assets/login-access-banner.svg"
-  alt="Login Access — autenticación, MFA y distribución de accesos del Ecosistema Integral DGCP"
-  width="100%"
+src="./docs/assets/login-access-banner.svg"
+alt="Login Access — autenticación, MFA y distribución de accesos del Ecosistema Integral DGCP"
+width="100%"
 />
 
 <br />
@@ -41,42 +41,38 @@
   <a href="#️-arquitectura"><strong>Arquitectura</strong></a>
   ·
   <a href="#-stack-tecnológico"><strong>Stack</strong></a>
-  ·
-  <a href="#-calidad"><strong>Calidad</strong></a>
 </p>
 
 </div>
 
----
+✨ Descripción
 
-## ✨ Descripción
-
-**Login Access** es el punto de entrada autenticado del **Ecosistema Integral DGCP**.
+Login Access es el punto de entrada autenticado del Ecosistema Integral DGCP.
 
 Centraliza la validación de identidad, MFA y permisos antes de mostrar al usuario los
 módulos que tiene autorizados. Cada módulo operativo continúa siendo un frontend
 independiente; Login Access se ocupa de la autenticación y de entregar un
-`redirect-code` hacia el destino seleccionado.
+redirect-code hacia el destino seleccionado.
 
 <table>
 <tr>
 <td width="33%" align="center" valign="top">
 
-### 🔐 Identidad
+🔐 Identidad
 
 Login, activación, recuperación y restablecimiento de contraseña.
 
 </td>
 <td width="33%" align="center" valign="top">
 
-### 🛡️ Seguridad
+🛡️ Seguridad
 
 MFA/TOTP, inactividad, sesión y cierre sincronizado.
 
 </td>
 <td width="33%" align="center" valign="top">
 
-### 🧭 Accesos
+🧭 Accesos
 
 Permisos por usuario y redirección a frontends autorizados.
 
@@ -84,35 +80,39 @@ Permisos por usuario y redirección a frontends autorizados.
 </tr>
 </table>
 
-> [!IMPORTANT]
-> El frontend está saneado y validado. El único hallazgo pendiente de React Doctor depende
-> del contrato actual de `auth_service`: el `refresh_token` todavía se entrega mediante JSON.
-> La arquitectura objetivo lo moverá a una cookie `HttpOnly`, `Secure` y `SameSite`.
+🖼️ Vista previa
 
----
-
-## 🖼️ Vista previa
-
-<p align="center">
-  <img
-    src="./docs/assets/login-access-preview.png"
-    alt="Interfaz de inicio de sesión de Login Access"
-    width="100%"
-  />
-</p>
+<table>
+  <tr>
+    <td align="center"><strong>Inicio de sesión</strong></td>
+    <td align="center"><strong>Accesos disponibles</strong></td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img
+        src="./docs/assets/login-access-preview.png"
+        alt="Interfaz de inicio de sesión de Login Access"
+      />
+    </td>
+    <td width="50%">
+      <img
+        src="./docs/assets/login-access-accesos-preview.png"
+        alt="Interfaz de accesos disponibles de Login Access"
+      />
+    </td>
+  </tr>
+</table>
 
 <p align="center">
   <sub>
-    Flujo de autenticación institucional. Los datos representados en las interfaces de diseño
-    son demostrativos.
+    Flujo de autenticación y distribución de accesos. Los datos representados en las
+    interfaces son demostrativos.
   </sub>
 </p>
 
----
+🎨 Diseño en Figma
 
-## 🎨 Diseño en Figma
-
-El archivo de **Login Access** funciona como referencia visual y funcional del producto,
+El archivo de Login Access funciona como referencia visual y funcional del producto,
 incluyendo estados normales, errores, seguridad y accesos.
 
 <p align="center">
@@ -125,50 +125,64 @@ incluyendo estados normales, errores, seguridad y accesos.
 <tr>
 <td width="33%" valign="top">
 
-**Login**
+Login
 
-- acceso normal;
-- campos vacíos;
-- credenciales incorrectas;
-- cuenta bloqueada;
-- sesión expirada;
-- error de conexión;
-- loading.
+acceso normal;
 
-</td>
-<td width="33%" valign="top">
+campos vacíos;
 
-**MFA**
+credenciales incorrectas;
 
-- configuración TOTP;
-- código QR;
-- verificación;
-- código inválido;
-- estados de seguridad.
+cuenta bloqueada;
+
+sesión expirada;
+
+error de conexión;
+
+loading.
 
 </td>
 <td width="33%" valign="top">
 
-**Accesos**
+MFA
 
-- módulos autorizados;
-- loading / skeleton;
-- ausencia de permisos;
-- error de carga;
-- detalle de permisos;
-- logout;
-- toasts.
+configuración TOTP;
+
+código QR;
+
+verificación;
+
+código inválido;
+
+estados de seguridad.
+
+</td>
+<td width="33%" valign="top">
+
+Accesos
+
+módulos autorizados;
+
+loading / skeleton;
+
+ausencia de permisos;
+
+error de carga;
+
+detalle de permisos;
+
+logout;
+
+toasts.
 
 </td>
 </tr>
 </table>
 
-> Figma define la referencia de producto. La implementación mantiene componentes,
-> design tokens y reglas técnicas propias del frontend.
+Figma define la referencia de producto. La implementación mantiene componentes,
+design tokens y reglas técnicas propias del frontend.
 
----
-
-## 🏗️ Arquitectura
+🏗️ Arquitectura
 
 <p align="center">
   <img
@@ -178,48 +192,64 @@ incluyendo estados normales, errores, seguridad y accesos.
   />
 </p>
 
-### Flujo principal
+Flujo principal
 
-```text
 Usuario
-   ↓
+↓
 Login Access :5174
-   │
-   ├── login / MFA
-   ├── consulta de identidad y permisos
-   └── selección de módulo
-          │
-          ├── Mesa de Ayuda :5173
-          ├── Formato NNA :5175
-          ├── Directorio de Procuradores :5177
-          ├── Control Agenda Nacional :5179
-          └── Configuración :5180
-                 ↑
-           redirect-code
+│
+├── login / MFA
+├── consulta de identidad y permisos
+└── selección de módulo
+│
+├── Mesa de Ayuda :5173
+├── Formato NNA :5175
+├── Directorio de Procuradores :5177
+├── Control Agenda Nacional :5179
+└── Configuración :5180
+↑
+redirect-code
 
 auth_service :8001
-   └── autoridad de autenticación y autorización
-```
+└── autoridad de autenticación y autorización
 
----
+🧩 Capacidades
 
-## 🧩 Capacidades
+Área
 
-| Área          | Implementación                                                   |
-| ------------- | ---------------------------------------------------------------- |
-| Autenticación | Login, activación, recuperación y restablecimiento               |
-| MFA           | Configuración y verificación TOTP                                |
-| Sesión        | Access token en memoria, inactividad y logout                    |
-| Permisos      | Consulta de módulos y acciones autorizadas                       |
-| Navegación    | Guards y redirección mediante `redirect-code`                    |
-| Estados       | Loading, error, cuenta bloqueada, sesión expirada y sin permisos |
-| Perfil        | Información administrativa y estado de seguridad                 |
+Implementación
 
----
+Autenticación
 
-## 🛠️ Stack tecnológico
+Login, activación, recuperación y restablecimiento
 
-### Frontend
+MFA
+
+Configuración y verificación TOTP
+
+Sesión
+
+Access token en memoria, inactividad y logout
+
+Permisos
+
+Consulta de módulos y acciones autorizadas
+
+Navegación
+
+Guards y redirección mediante redirect-code
+
+Estados
+
+Loading, error, cuenta bloqueada, sesión expirada y sin permisos
+
+Perfil
+
+Información administrativa y estado de seguridad
+
+🛠️ Stack tecnológico
+
+Frontend
 
 <p align="center">
   <img
@@ -238,7 +268,7 @@ auth_service :8001
   <img src="https://img.shields.io/badge/Motion-12.43.0-FFF312?style=flat-square&logo=framer&logoColor=111111" alt="Motion 12.43.0" />
 </p>
 
-### UI · Diseño · Calidad
+UI · Diseño · Calidad
 
 <p align="center">
   <img
@@ -257,122 +287,34 @@ auth_service :8001
   <img src="https://img.shields.io/badge/React_Doctor-auditor%C3%ADa-22C55E?style=flat-square&logo=react&logoColor=white" alt="React Doctor" />
 </p>
 
----
+🗂️ Organización del código
 
-## 🗂️ Organización del código
-
-```text
 src/
 ├── api/
 ├── app/
-│   ├── providers/
-│   ├── router/
-│   └── styles/
+│ ├── providers/
+│ ├── router/
+│ └── styles/
 ├── components/
-│   ├── layout/
-│   └── ui/
+│ ├── layout/
+│ └── ui/
 ├── features/
-│   ├── access/
-│   ├── auth/
-│   └── profile/
+│ ├── access/
+│ ├── auth/
+│ └── profile/
 ├── shared/
-│   ├── config/
-│   ├── constants/
-│   ├── hooks/
-│   ├── lib/
-│   ├── navigation/
-│   └── theme/
+│ ├── config/
+│ ├── constants/
+│ ├── hooks/
+│ ├── lib/
+│ ├── navigation/
+│ └── theme/
 └── main.tsx
-```
 
-La estructura prioriza **dominio, reutilización, contratos tipados, testabilidad y
-escalabilidad**.
+La estructura prioriza dominio, reutilización, contratos tipados, testabilidad y
+escalabilidad.
 
----
-
-## ⚡ Inicio rápido
-
-```powershell
-git clone https://github.com/Javiergr99/Login_Access_DGCP.git
-cd Login_Access_DGCP
-npm install
-npm run dev
-```
-
-Aplicación local:
-
-```text
-http://127.0.0.1:5174
-```
-
-Servicio de autenticación:
-
-```text
-http://127.0.0.1:8001
-```
-
-La configuración versionable se encuentra en `.env.example`.
-
-> [!CAUTION]
-> `.env` y `.env.local` son locales. Nunca deben versionarse JWT, contraseñas,
-> secretos TOTP, cookies, claves privadas u otras credenciales.
-
----
-
-## ✅ Calidad
-
-| Validación               |                                   Resultado |
-| ------------------------ | ------------------------------------------: |
-| UTF-8 sin BOM / mojibake |                           ✅ `176` archivos |
-| Estructura               | ✅ `139` TypeScript / `0` imports faltantes |
-| TypeScript               |                                          ✅ |
-| ESLint                   |                 ✅ `0 errores / 0 warnings` |
-| Tests unitarios          |                                  ✅ `29/29` |
-| Build Vite               |                                          ✅ |
-| E2E mock                 |                                    ✅ `1/1` |
-| npm audit                |                     ✅ `0 vulnerabilidades` |
-| React Doctor             |           ⚠️ `72/100` · 1 hallazgo conocido |
-
-### Quality gate
-
-```powershell
-npm run quality
-```
-
-```text
-encoding
-   ↓
-Prettier
-   ↓
-estructura
-   ↓
-TypeScript
-   ↓
-ESLint
-   ↓
-tests
-   ↓
-build
-   ↓
-React Doctor
-```
-
-### Pendiente contractual
-
-El único hallazgo de React Doctor es:
-
-```text
-auth-token-in-web-storage
-```
-
-El contrato actual de `auth_service` entrega el `refresh_token` mediante JSON.
-Cuando Backend migre este token a una cookie `HttpOnly`, `Secure` y `SameSite`,
-el frontend eliminará su persistencia en Web Storage y se ejecutarán nuevamente
-React Doctor y el E2E real.
-
----
-
-## 👨‍💻 Autor
+👨‍💻 Autor
 
 <div align="center">
 
@@ -386,7 +328,7 @@ Programador Jr · Diseño y desarrollo frontend
   <img src="https://img.shields.io/badge/GitHub-Javiergr99-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub de Javier Garcia" />
 </a>
 
-&nbsp;
+ 
 
 <a href="https://www.figma.com/design/ZPiqqx5Ml36Nmj5sz2Z6o6/Login-Access?node-id=0-1&t=Xhj2g0gqPsS7Qqtr-1">
   <img src="https://img.shields.io/badge/Figma-Login_Access-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma Login Access" />
