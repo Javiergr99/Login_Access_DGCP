@@ -15,6 +15,108 @@ const toneClassNames: Record<AccessTone, string> = {
   amber: "access-tone-amber",
 };
 
+type AccessCardProps = {
+  access: AccessItem;
+  onViewPermissions: () => void;
+  onEnter: () => void;
+  isEntering: boolean;
+  isNavigationLocked?: boolean;
+  animationIndex?: number;
+};
+
+function getAccessCardState(access: AccessItem, isNavigationLocked: boolean, isEntering: boolean) {
+  return {
+    disabled: access.access_level === "restricted" || (isNavigationLocked && !isEntering),
+    remainingPermissions: Math.max(0, access.permissions.length - access.visiblePermissions.length),
+  };
+}
+
+function getAccessCardMotion(
+  reduceMotion: boolean | null,
+  disabled: boolean,
+  animationIndex: number,
+) {
+  return {
+    initial: reduceMotion ? false : { opacity: 0, y: 14, scale: 0.985 },
+    whileHover: disabled || reduceMotion ? undefined : { y: -4, scale: 1.006 },
+    whileTap: disabled || reduceMotion ? undefined : { scale: 0.996 },
+    transition: {
+      duration: reduceMotion ? 0 : 0.24,
+      delay: reduceMotion ? 0 : animationIndex * 0.055,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  };
+}
+
+function AccessPermissions({
+  access,
+  remainingPermissions,
+}: {
+  access: AccessItem;
+  remainingPermissions: number;
+}) {
+  if (access.visiblePermissions.length === 0) {
+    return (
+      <ul className="mt-2.5 space-y-1.5" aria-label={`Permisos de ${access.title}`}>
+        <li className="text-[11.5px] text-[var(--color-text-muted)]">
+          El backend no reportó permisos granulares para este acceso.
+        </li>
+      </ul>
+    );
+  }
+
+  return (
+    <ul className="mt-2.5 space-y-1.5" aria-label={`Permisos de ${access.title}`}>
+      {access.visiblePermissions.map((permission) => (
+        <li
+          key={permission.code}
+          className="flex items-center gap-2 text-[11.5px] text-[var(--color-text-secondary)]"
+        >
+          <CheckCircle2
+            className="h-3.5 w-3.5 shrink-0 text-[var(--color-success)]"
+            strokeWidth={2.4}
+          />
+          <span className="truncate">{permission.label}</span>
+        </li>
+      ))}
+      <AdditionalPermissionCount count={remainingPermissions} />
+    </ul>
+  );
+}
+
+function AdditionalPermissionCount({ count }: { count: number }) {
+  if (count <= 0) return null;
+
+  return (
+    <li className="pl-[22px] text-[10.5px] font-medium-token text-[var(--color-text-muted)]">
+      +{count} permisos adicionales
+    </li>
+  );
+}
+
+function AccessButtonContent({ access, isEntering }: { access: AccessItem; isEntering: boolean }) {
+  if (isEntering) {
+    return (
+      <>
+        <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> Preparando…
+      </>
+    );
+  }
+
+  return (
+    <>
+      {access.buttonLabel}
+      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+    </>
+  );
+}
+
+function getNavigationLockTitle(isNavigationLocked: boolean, isEntering: boolean) {
+  return isNavigationLocked && !isEntering
+    ? "Espere mientras se prepara el acceso seleccionado."
+    : undefined;
+}
+
 export function AccessCard({
   access,
   onViewPermissions,
@@ -22,34 +124,23 @@ export function AccessCard({
   isEntering,
   isNavigationLocked = false,
   animationIndex = 0,
-}: {
-  access: AccessItem;
-  onViewPermissions: () => void;
-  onEnter: () => void;
-  isEntering: boolean;
-  isNavigationLocked?: boolean;
-  animationIndex?: number;
-}) {
+}: AccessCardProps) {
   const reduceMotion = useReducedMotion();
-  const Icon = access.icon;
-  const disabled = access.access_level === "restricted" || (isNavigationLocked && !isEntering);
-  const remainingPermissions = Math.max(
-    0,
-    access.permissions.length - access.visiblePermissions.length,
+  const { disabled, remainingPermissions } = getAccessCardState(
+    access,
+    isNavigationLocked,
+    isEntering,
   );
+  const motion = getAccessCardMotion(reduceMotion, disabled, animationIndex);
 
   return (
     <LazyMotion features={domAnimation}>
       <m.article
-        initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.985 }}
+        initial={motion.initial}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        whileHover={disabled || reduceMotion ? undefined : { y: -4, scale: 1.006 }}
-        whileTap={disabled || reduceMotion ? undefined : { scale: 0.996 }}
-        transition={{
-          duration: reduceMotion ? 0 : 0.24,
-          delay: reduceMotion ? 0 : animationIndex * 0.055,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        whileHover={motion.whileHover}
+        whileTap={motion.whileTap}
+        transition={motion.transition}
         className={cn(
           toneClassNames[access.tone],
           "group relative flex min-h-[286px] flex-col overflow-hidden rounded-[var(--radius-lg)] border",
@@ -65,7 +156,7 @@ export function AccessCard({
 
         <div className="flex items-start justify-between gap-3">
           <span className="grid h-8 w-8 place-items-center rounded-[9px] bg-[var(--accent-color-soft)] text-[var(--accent-color)] transition-transform duration-200 group-hover:-rotate-2 group-hover:scale-105">
-            <Icon className="h-[18px] w-[18px]" strokeWidth={2.1} />
+            <access.icon className="h-[18px] w-[18px]" strokeWidth={2.1} />
           </span>
           <PermissionBadge label={access.badgeLabel} tone={access.tone} />
         </div>
@@ -82,31 +173,7 @@ export function AccessCard({
           </div>
         </div>
 
-        <ul className="mt-2.5 space-y-1.5" aria-label={`Permisos de ${access.title}`}>
-          {access.visiblePermissions.length > 0 ? (
-            access.visiblePermissions.map((permission) => (
-              <li
-                key={permission.code}
-                className="flex items-center gap-2 text-[11.5px] text-[var(--color-text-secondary)]"
-              >
-                <CheckCircle2
-                  className="h-3.5 w-3.5 shrink-0 text-[var(--color-success)]"
-                  strokeWidth={2.4}
-                />
-                <span className="truncate">{permission.label}</span>
-              </li>
-            ))
-          ) : (
-            <li className="text-[11.5px] text-[var(--color-text-muted)]">
-              El backend no reportó permisos granulares para este acceso.
-            </li>
-          )}
-          {remainingPermissions > 0 ? (
-            <li className="pl-[22px] text-[10.5px] font-medium-token text-[var(--color-text-muted)]">
-              +{remainingPermissions} permisos adicionales
-            </li>
-          ) : null}
-        </ul>
+        <AccessPermissions access={access} remainingPermissions={remainingPermissions} />
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <button
@@ -123,23 +190,10 @@ export function AccessCard({
             onClick={onEnter}
             disabled={disabled || isEntering}
             aria-busy={isEntering}
-            title={
-              isNavigationLocked && !isEntering
-                ? "Espere mientras se prepara el acceso seleccionado."
-                : undefined
-            }
+            title={getNavigationLockTitle(isNavigationLocked, isEntering)}
             className="min-w-[104px] text-[12px]"
           >
-            {isEntering ? (
-              <>
-                <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> Preparando…
-              </>
-            ) : (
-              <>
-                {access.buttonLabel}
-                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
-              </>
-            )}
+            <AccessButtonContent access={access} isEntering={isEntering} />
           </Button>
         </div>
       </m.article>

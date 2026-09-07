@@ -9,6 +9,8 @@ const ignoredDirectories = new Set([
   "node_modules",
   "dist",
   "coverage",
+  ".vite",
+  ".cache",
   "playwright-report",
   "playwright-report-real",
   "test-results",
@@ -40,9 +42,7 @@ const textFilesWithoutRelevantExtension = new Set([
   ".env.example",
 ]);
 
-const utf8Decoder = new TextDecoder("utf-8", {
-  fatal: true,
-});
+const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
 
 const suspiciousPatterns = [
   {
@@ -57,7 +57,6 @@ const suspiciousPatterns = [
 
 function shouldInspect(filePath) {
   const fileName = path.basename(filePath);
-
   return (
     textExtensions.has(path.extname(fileName).toLowerCase()) ||
     textFilesWithoutRelevantExtension.has(fileName)
@@ -65,38 +64,24 @@ function shouldInspect(filePath) {
 }
 
 async function collectFiles(directory) {
-  const entries = await readdir(directory, {
-    withFileTypes: true,
-  });
+  const entries = await readdir(directory, { withFileTypes: true });
+  const groups = await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = path.join(directory, entry.name);
 
-  const files = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(directory, entry.name);
-
-    if (entry.isDirectory()) {
-      if (ignoredDirectories.has(entry.name)) {
-        continue;
+      if (entry.isDirectory()) {
+        return ignoredDirectories.has(entry.name) ? [] : collectFiles(fullPath);
       }
 
-      files.push(...(await collectFiles(fullPath)));
-      continue;
-    }
+      return entry.isFile() && shouldInspect(fullPath) ? [fullPath] : [];
+    }),
+  );
 
-    if (entry.isFile() && shouldInspect(fullPath)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
+  return groups.flat();
 }
 
 function hasUtf8Bom(buffer) {
   return buffer.length >= 3 && buffer[0] === 0xef && buffer[1] === 0xbb && buffer[2] === 0xbf;
-}
-
-function relative(filePath) {
-  return path.relative(root, filePath);
 }
 
 function firstMatchingLine(content, pattern) {
@@ -107,64 +92,52 @@ function firstMatchingLine(content, pattern) {
       pattern.lastIndex = 0;
       return index + 1;
     }
-
     pattern.lastIndex = 0;
   }
 
   return null;
 }
 
-const files = await collectFiles(root);
-const issues = [];
-
-for (const file of files) {
-  const buffer = await readFile(file);
+function inspectFile(file, buffer) {
+  const issues = [];
+  const relativeFile = path.relative(root, file);
 
   if (hasUtf8Bom(buffer)) {
-    issues.push({
-      file: relative(file),
-      reason: "Contiene BOM UTF-8.",
-    });
+    issues.push({ file: relativeFile, reason: "Contiene BOM UTF-8." });
   }
 
   let content;
-
   try {
     content = utf8Decoder.decode(buffer);
   } catch {
-    issues.push({
-      file: relative(file),
-      reason: "No contiene UTF-8 válido.",
-    });
-
-    continue;
+    issues.push({ file: relativeFile, reason: "No contiene UTF-8 válido." });
+    return issues;
   }
 
   for (const { name, pattern } of suspiciousPatterns) {
     const line = firstMatchingLine(content, pattern);
-
     if (line !== null) {
-      issues.push({
-        file: relative(file),
-        reason: `${name} en línea ${line}.`,
-      });
+      issues.push({ file: relativeFile, reason: `${name} en línea ${line}.` });
     }
   }
+
+  return issues;
 }
+
+const files = await collectFiles(root);
+const inspectedFiles = await Promise.all(
+  files.map(async (file) => ({ file, buffer: await readFile(file) })),
+);
+const issues = inspectedFiles.flatMap(({ file, buffer }) => inspectFile(file, buffer));
 
 if (issues.length > 0) {
   console.error("");
   console.error("Validación de encoding fallida:");
   console.error("");
-
-  for (const issue of issues) {
-    console.error(`- ${issue.file}: ${issue.reason}`);
-  }
-
+  for (const issue of issues) console.error(`- ${issue.file}: ${issue.reason}`);
   console.error("");
   console.error("Todos los archivos de texto deben usar UTF-8 sin BOM y no contener mojibake.");
   console.error("");
-
   process.exitCode = 1;
 } else {
   console.log(`Encoding validado: ${files.length} archivos UTF-8 sin BOM ni mojibake conocido.`);

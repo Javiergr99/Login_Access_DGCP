@@ -1,7 +1,7 @@
 /**
  * Contrato de integración validado contra auth_service v2.0.
  *
- * Fuente funcional: contrato del 05 de agosto de 2026. Los identificadores
+ * Fuente funcional: contrato técnico Auth v2.0 del 06 de septiembre de 2026. Los identificadores
  * técnicos de permisos se consumen por nombre; los UUID no se usan para
  * decidir visibilidad o autorización en el frontend.
  */
@@ -168,7 +168,7 @@ export type GetCurrentUserResponse = UsuarioAutenticado;
 export interface LoginRequest {
   curp: string;
   password: string;
-  /** Decide la persistencia local de los tokens; no se envía al backend. */
+  /** Preferencia no sensible que se propaga al cierre del flujo MFA. */
   remember_session?: boolean;
 }
 
@@ -211,7 +211,6 @@ export type EnableTwoFactorRequest = TempTokenVerifyRequest;
 
 export interface TokenResponse {
   access_token: string;
-  refresh_token: string;
   token_type: "bearer";
 }
 
@@ -231,15 +230,7 @@ export interface ExchangeCodeRequest {
   code: string;
 }
 
-export interface RefreshTokenRequest {
-  refresh_token: string;
-}
-
 export type RefreshSessionResponse = TokenResponse;
-
-export interface LogoutRequest {
-  refresh_token: string;
-}
 
 export type LogoutResponse = SuccessResponse;
 

@@ -16,12 +16,12 @@ import type {
   VerifyTwoFactorRequest,
   VerifyTwoFactorResponse,
 } from "@/features/auth/api/auth.contracts";
+import { sessionPersistence } from "@/features/auth/services/session-persistence";
 import { DEMO_CREDENTIALS, DEMO_MFA_SECRET } from "@/shared/constants/demo";
 import { delay } from "@/shared/lib/delay";
 
 const MOCK_TEMP_TOKEN = "demo-temp-token";
 const MOCK_ACCESS_TOKEN = "demo-access-token";
-const MOCK_REFRESH_TOKEN = "demo-refresh-token";
 
 const mesaAyudaActions: AppAction[] = [
   "VER_DASHBOARD",
@@ -113,7 +113,6 @@ export const demoUser: GetCurrentUserResponse = {
 function tokenResponse() {
   return {
     access_token: MOCK_ACCESS_TOKEN,
-    refresh_token: MOCK_REFRESH_TOKEN,
     token_type: "bearer" as const,
   };
 }
@@ -197,6 +196,15 @@ export const mockAuthService = {
 
   async refreshSession(): Promise<RefreshSessionResponse> {
     await delay(180);
+
+    if (!sessionPersistence.has()) {
+      throw new ApiError({
+        code: "SESSION_EXPIRED",
+        status: 401,
+        message: "No existe una sesión renovable.",
+      });
+    }
+
     return tokenResponse();
   },
 

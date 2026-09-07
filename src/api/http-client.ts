@@ -65,24 +65,17 @@ function rememberSessionHeaders() {
   };
 }
 
-async function refreshSessionTokens(): Promise<RefreshSessionResponse> {
-  if (!authTokenStorage.hasSession()) {
-    throw new Error("No existe una sesión renovable.");
-  }
-
+/**
+ * Renueva el access token utilizando exclusivamente la cookie HttpOnly que el
+ * navegador envía con credentials. Todas las renovaciones concurrentes comparten
+ * la misma promesa para respetar la rotación del refresh token en Backend.
+ */
+export async function refreshSessionWithCookie(): Promise<RefreshSessionResponse> {
   if (!refreshPromise) {
-    const refreshToken = authTokenStorage.getRefreshToken();
-
-    if (!refreshToken) {
-      throw new Error("No existe un refresh token para renovar la sesión.");
-    }
-
     refreshPromise = refreshClient
-      .post<RefreshSessionResponse>(
-        "/auth/refresh",
-        { refresh_token: refreshToken },
-        { headers: rememberSessionHeaders() },
-      )
+      .post<RefreshSessionResponse>("/auth/refresh", undefined, {
+        headers: rememberSessionHeaders(),
+      })
       .then((response) => {
         authTokenStorage.replace(response.data);
         return response.data;
@@ -126,15 +119,18 @@ httpClient.interceptors.response.use(
     const config = axiosError.config as RetryableRequestConfig | undefined;
     const status = axiosError.response?.status;
 
-    if (status === 401 && config && shouldAttemptRefresh(config) && authTokenStorage.hasSession()) {
+    if (status === 401 && config && shouldAttemptRefresh(config)) {
       config._authRetry = true;
 
       try {
-        await refreshSessionTokens();
+        await refreshSessionWithCookie();
         const accessToken = authTokenStorage.getAccessToken();
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
+
+        if (!accessToken) {
+          throw new Error("La renovación no devolvió un access token.");
         }
+
+        config.headers.Authorization = `Bearer ${accessToken}`;
         return await httpClient(config);
       } catch {
         authTokenStorage.clear();

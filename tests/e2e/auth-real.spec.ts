@@ -6,8 +6,8 @@ import { generateTotp } from "./helpers/totp";
 
 const AUTH_URL = "http://127.0.0.1:5174";
 const APP_URL = "http://127.0.0.1:5173";
-const API_URL = process.env.E2E_API_URL ?? "http://127.0.0.1:8000";
-const REFRESH_COOKIE_NAME = process.env.E2E_REFRESH_COOKIE_NAME ?? "mesa_ayuda_refresh";
+const API_URL = process.env.E2E_API_URL ?? "http://127.0.0.1:8001";
+const REFRESH_COOKIE_NAME = process.env.E2E_REFRESH_COOKIE_NAME ?? "dgcp_refresh_token";
 
 function requiredEnv(name: string): string {
   const value = process.env[name]?.trim();
@@ -119,6 +119,8 @@ test("login real, MFA, SSO, refresh y logout", async ({ page, context, request }
     expect(refreshCookie?.httpOnly).toBe(true);
 
     expect(refreshCookie?.path).toBe("/auth");
+    expect(refreshCookie?.sameSite).toBe("Lax");
+    expect(refreshCookie?.secure).toBe(false);
 
     await expectNoCredentialTokens(page);
   });

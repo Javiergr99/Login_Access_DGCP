@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { queryClient } from "@/app/providers/query-client";
 import { authKeys } from "@/features/auth/api/auth.keys";
-import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
+import { authService } from "@/features/auth/api/auth.service";
 import { useAuthStore } from "@/features/auth/model/auth.store";
 import {
   AUTH_SESSION_CHANNEL,
@@ -28,32 +28,38 @@ type SessionMessage = {
 export function SessionSecurityProvider({ children }: { children: ReactNode }) {
   const sessionStatus = useAuthStore((state) => state.sessionStatus);
   const setAuthenticatedUser = useAuthStore((state) => state.setAuthenticatedUser);
-  const setSessionAnonymous = useAuthStore((state) => state.setSessionAnonymous);
-  const canRestoreSession = authTokenStorage.hasSession();
-  const currentUserQuery = useCurrentUser(canRestoreSession);
 
   useEffect(() => {
-    if (!canRestoreSession) {
-      setSessionAnonymous();
-      return;
-    }
+    let cancelled = false;
 
-    if (currentUserQuery.data) {
-      setAuthenticatedUser(currentUserQuery.data);
-      return;
-    }
+    const bootstrapSession = async () => {
+      if (useAuthStore.getState().sessionStatus !== "checking") {
+        return;
+      }
 
-    if (currentUserQuery.isError) {
-      clearLocalAuthentication();
-      setSessionAnonymous();
-    }
-  }, [
-    canRestoreSession,
-    currentUserQuery.data,
-    currentUserQuery.isError,
-    setAuthenticatedUser,
-    setSessionAnonymous,
-  ]);
+      try {
+        if (!authTokenStorage.getAccessToken()) {
+          await authService.refreshSession();
+        }
+
+        const user = await authService.getCurrentUser();
+
+        if (cancelled) return;
+
+        queryClient.setQueryData(authKeys.currentUser(), user);
+        setAuthenticatedUser(user);
+      } catch {
+        if (cancelled) return;
+        clearLocalAuthentication();
+      }
+    };
+
+    void bootstrapSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [setAuthenticatedUser]);
 
   useEffect(() => {
     const onSessionExpired = () => {
@@ -64,8 +70,6 @@ export function SessionSecurityProvider({ children }: { children: ReactNode }) {
 
       if (wasAuthenticated) {
         window.location.replace("/login?reason=session-expired");
-      } else {
-        state.setSessionAnonymous();
       }
     };
 
@@ -129,12 +133,6 @@ export function SessionSecurityProvider({ children }: { children: ReactNode }) {
         window.removeEventListener(eventName, scheduleLogout);
       }
     };
-  }, [sessionStatus]);
-
-  useEffect(() => {
-    if (sessionStatus === "authenticated") {
-      queryClient.setQueryData(authKeys.currentUser(), useAuthStore.getState().user);
-    }
   }, [sessionStatus]);
 
   return children;

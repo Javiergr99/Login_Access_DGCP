@@ -1,5 +1,4 @@
-import { access, readFile, readdir } from "node:fs/promises";
-import { constants } from "node:fs";
+import { accessSync, constants, existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,36 +33,26 @@ const ignoredDirectories = new Set([
 const sourceExtensions = [".ts", ".tsx"];
 const resolutionExtensions = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json"];
 
-async function exists(path) {
+function exists(filePath) {
   try {
-    await access(path, constants.F_OK);
+    accessSync(filePath, constants.F_OK);
     return true;
   } catch {
     return false;
   }
 }
 
-async function collectTypeScriptFiles(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
+function collectTypeScriptFiles(directory) {
   const files = [];
 
-  for (const entry of entries) {
-    if (entry.name.startsWith(".") && entry.name !== ".github") {
-      continue;
-    }
-
-    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) {
-      continue;
-    }
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.name.startsWith(".") && entry.name !== ".github") continue;
+    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
 
     const absolutePath = resolve(directory, entry.name);
-
     if (entry.isDirectory()) {
-      files.push(...(await collectTypeScriptFiles(absolutePath)));
-      continue;
-    }
-
-    if (sourceExtensions.includes(extname(entry.name))) {
+      files.push(...collectTypeScriptFiles(absolutePath));
+    } else if (sourceExtensions.includes(extname(entry.name))) {
       files.push(absolutePath);
     }
   }
@@ -73,7 +62,6 @@ async function collectTypeScriptFiles(directory) {
 
 function extractLocalImports(source) {
   const imports = new Set();
-
   const patterns = [
     /(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/g,
     /import\(\s*["']([^"']+)["']\s*\)/g,
@@ -83,80 +71,58 @@ function extractLocalImports(source) {
   for (const pattern of patterns) {
     for (const match of source.matchAll(pattern)) {
       const specifier = match[1];
-
-      if (specifier?.startsWith(".")) {
-        imports.add(specifier.split("?")[0].split("#")[0]);
-      }
+      if (specifier?.startsWith(".")) imports.add(specifier.split("?")[0].split("#")[0]);
     }
   }
 
   return [...imports];
 }
 
-async function resolveLocalImport(sourceFile, specifier) {
+function resolveLocalImport(sourceFile, specifier) {
   const base = resolve(dirname(sourceFile), specifier);
 
-  if (await exists(base)) {
-    return true;
-  }
+  if (existsSync(base)) return true;
 
-  for (const extension of resolutionExtensions) {
-    if (await exists(`${base}${extension}`)) {
-      return true;
-    }
-  }
+  // Solo consideramos una extensión explícita cuando es una extensión de módulo
+  // reconocida. Nombres válidos como `foo.schema` o `bar.contracts` deben seguir
+  // probándose como `foo.schema.ts`, `bar.contracts.ts`, etc.
+  const explicitExtension = extname(base);
+  if (resolutionExtensions.includes(explicitExtension)) return false;
 
-  for (const extension of resolutionExtensions) {
-    if (await exists(resolve(base, `index${extension}`))) {
-      return true;
-    }
-  }
+  const candidates = [
+    ...resolutionExtensions.map((extension) => `${base}${extension}`),
+    ...resolutionExtensions.map((extension) => resolve(base, `index${extension}`)),
+  ];
 
-  return false;
+  return candidates.some(existsSync);
 }
 
-const missingRequired = [];
-
-for (const relativePath of requiredPaths) {
-  if (!(await exists(resolve(root, relativePath)))) {
-    missingRequired.push(relativePath);
-  }
-}
+const missingRequired = requiredPaths.filter(
+  (relativePath) => !exists(resolve(root, relativePath)),
+);
 
 if (missingRequired.length > 0) {
   console.error("La estructura del proyecto está incompleta:");
-
-  for (const path of missingRequired) {
-    console.error(`- ${path}`);
-  }
-
+  for (const path of missingRequired) console.error(`- ${path}`);
   process.exit(1);
 }
 
-const typeScriptFiles = await collectTypeScriptFiles(root);
+const typeScriptFiles = collectTypeScriptFiles(root);
 const missingImports = [];
 
 for (const file of typeScriptFiles) {
-  const source = await readFile(file, "utf8");
-  const imports = extractLocalImports(source);
+  const source = readFileSync(file, "utf8");
 
-  for (const specifier of imports) {
-    if (!(await resolveLocalImport(file, specifier))) {
-      missingImports.push({
-        file: relative(root, file),
-        specifier,
-      });
+  for (const specifier of extractLocalImports(source)) {
+    if (!resolveLocalImport(file, specifier)) {
+      missingImports.push({ file: relative(root, file), specifier });
     }
   }
 }
 
 if (missingImports.length > 0) {
   console.error("Se encontraron importaciones locales sin resolver:");
-
-  for (const item of missingImports) {
-    console.error(`- ${item.file} -> ${item.specifier}`);
-  }
-
+  for (const item of missingImports) console.error(`- ${item.file} -> ${item.specifier}`);
   process.exit(1);
 }
 

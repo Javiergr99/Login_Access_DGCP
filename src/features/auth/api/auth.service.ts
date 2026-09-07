@@ -1,4 +1,4 @@
-import { httpClient } from "@/api/http-client";
+import { httpClient, refreshSessionWithCookie } from "@/api/http-client";
 import type {
   CreatePasswordRequest,
   CreatePasswordResponse,
@@ -19,7 +19,6 @@ import type {
   VerifyTwoFactorResponse,
 } from "@/features/auth/api/auth.contracts";
 import { mockAuthService } from "@/features/auth/api/mock-auth.service";
-import { authTokenStorage } from "@/features/auth/services/token-storage";
 import { env } from "@/shared/config/env";
 
 export type AuthService = {
@@ -88,29 +87,11 @@ export const httpAuthService: AuthService = {
   },
 
   async refreshSession() {
-    const refreshToken = authTokenStorage.getRefreshToken();
-
-    if (!refreshToken) {
-      throw new Error("No existe un refresh token para renovar la sesión.");
-    }
-
-    const response = await httpClient.post<RefreshSessionResponse>(
-      "/auth/refresh",
-      { refresh_token: refreshToken },
-      {
-        headers: rememberSessionHeaders(authTokenStorage.getPersistence() === "persistent"),
-      },
-    );
-    authTokenStorage.replace(response.data);
-    return response.data;
+    return refreshSessionWithCookie();
   },
 
   async logout() {
-    const refreshToken = authTokenStorage.getRefreshToken();
-    const response = await httpClient.post<LogoutResponse>(
-      "/auth/logout",
-      refreshToken ? { refresh_token: refreshToken } : undefined,
-    );
+    const response = await httpClient.post<LogoutResponse>("/auth/logout");
     return response.data;
   },
 
