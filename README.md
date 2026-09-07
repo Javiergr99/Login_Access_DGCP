@@ -15,22 +15,29 @@
 </p>
 
 <p>
-  Login · MFA/TOTP · recuperación de acceso · sesión · permisos · redirección segura
+  Login · MFA/TOTP · recuperación de acceso · sesión · permisos · SSO · redirección segura
 </p>
 
 <p>
   <img src="https://img.shields.io/badge/Frontend-saneado-22C55E?style=for-the-badge" alt="Frontend saneado" />
-  <img src="https://img.shields.io/badge/React-19.2.8-61DAFB?style=for-the-badge&logo=react&logoColor=0F172A" alt="React 19.2.8" />
-  <img src="https://img.shields.io/badge/TypeScript-6.0.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 6.0.3" />
-  <img src="https://img.shields.io/badge/Vite-8.2.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8.2.0" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=0F172A" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-6-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 6" />
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8" />
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Auth-v2-059669?style=for-the-badge" alt="Auth v2" />
+  <img src="https://img.shields.io/badge/React_Doctor-100%2F100-22C55E?style=for-the-badge&logo=react&logoColor=white" alt="React Doctor 100 de 100" />
+  <img src="https://img.shields.io/badge/Unit_Tests-32%2F32-22C55E?style=for-the-badge&logo=vitest&logoColor=white" alt="32 de 32 pruebas unitarias" />
 </p>
 
 <p>
   <a href="https://www.figma.com/design/ZPiqqx5Ml36Nmj5sz2Z6o6/Login-Access?node-id=0-1&t=Xhj2g0gqPsS7Qqtr-1">
     <img src="https://img.shields.io/badge/Dise%C3%B1o-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Abrir diseño en Figma" />
   </a>
-  <img src="https://img.shields.io/badge/npm_audit-0_vulnerabilidades-22C55E?style=for-the-badge&logo=npm&logoColor=white" alt="npm audit 0 vulnerabilidades" />
-  <img src="https://img.shields.io/badge/Tests-29%2F29-22C55E?style=for-the-badge&logo=vitest&logoColor=white" alt="29 de 29 tests" />
+  <img src="https://img.shields.io/badge/E2E_real-PASS-22C55E?style=for-the-badge&logo=playwright&logoColor=white" alt="E2E real aprobado" />
+  <img src="https://img.shields.io/badge/npm_audit_prod-0_vulnerabilidades-22C55E?style=for-the-badge&logo=npm&logoColor=white" alt="npm audit producción 0 vulnerabilidades" />
+  <img src="https://img.shields.io/badge/UTF--8-sin_BOM-0EA5E9?style=for-the-badge" alt="UTF-8 sin BOM" />
 </p>
 
 <p>
@@ -40,7 +47,11 @@
   ·
   <a href="#️-arquitectura"><strong>Arquitectura</strong></a>
   ·
+  <a href="#-seguridad-y-auth-v2"><strong>Seguridad</strong></a>
+  ·
   <a href="#-stack-tecnológico"><strong>Stack</strong></a>
+  ·
+  <a href="#-calidad"><strong>Calidad</strong></a>
 </p>
 
 </div>
@@ -51,10 +62,9 @@
 
 **Login Access** es el punto de entrada autenticado del **Ecosistema Integral DGCP**.
 
-Centraliza la validación de identidad, MFA y permisos antes de mostrar al usuario los
-módulos que tiene autorizados. Cada módulo operativo continúa siendo un frontend
-independiente; Login Access se ocupa de la autenticación y de entregar un
-`redirect-code` hacia el destino seleccionado.
+Centraliza la validación de identidad, autenticación multifactor, estado de sesión y permisos antes de mostrar al usuario los módulos que tiene autorizados.
+
+Cada módulo operativo continúa funcionando como un frontend independiente. Login Access mantiene la autenticación centralizada y realiza el handoff hacia cada aplicación mediante un `redirect-code` temporal de un solo uso.
 
 <table>
 <tr>
@@ -69,14 +79,14 @@ Login, activación, recuperación y restablecimiento de contraseña.
 
 ### 🛡️ Seguridad
 
-MFA/TOTP, inactividad, sesión y cierre sincronizado.
+MFA/TOTP, sesión, renovación, inactividad y cierre sincronizado.
 
 </td>
 <td width="33%" align="center" valign="top">
 
 ### 🧭 Accesos
 
-Permisos por usuario y redirección a frontends autorizados.
+Permisos por usuario y redirección hacia frontends autorizados.
 
 </td>
 </tr>
@@ -118,8 +128,7 @@ Permisos por usuario y redirección a frontends autorizados.
 
 ## 🎨 Diseño en Figma
 
-El archivo de **Login Access** funciona como referencia visual y funcional del producto,
-incluyendo estados normales, errores, seguridad y accesos.
+El archivo de **Login Access** funciona como referencia visual y funcional del producto, incluyendo estados normales, errores, seguridad, MFA y distribución de accesos.
 
 <p align="center">
   <a href="https://www.figma.com/design/ZPiqqx5Ml36Nmj5sz2Z6o6/Login-Access?node-id=0-1&t=Xhj2g0gqPsS7Qqtr-1">
@@ -148,6 +157,7 @@ incluyendo estados normales, errores, seguridad y accesos.
 
 - configuración TOTP;
 - código QR;
+- clave manual;
 - verificación;
 - código inválido;
 - estados de seguridad.
@@ -169,8 +179,7 @@ incluyendo estados normales, errores, seguridad y accesos.
 </tr>
 </table>
 
-> Figma define la referencia de producto. La implementación mantiene componentes,
-> design tokens y reglas técnicas propias del frontend.
+> Figma define la referencia visual y funcional del producto. La implementación mantiene componentes, design tokens, contratos y reglas técnicas propias del frontend.
 
 ---
 
@@ -192,7 +201,7 @@ incluyendo estados normales, errores, seguridad y accesos.
 
 <br /><br />
 
-Usuario inicia sesión y completa MFA cuando corresponde.
+El usuario inicia sesión y completa MFA cuando corresponde.
 
 </td>
 <td width="25%" align="center" valign="top">
@@ -219,7 +228,7 @@ Login Access presenta únicamente los módulos habilitados.
 
 <br /><br />
 
-Se genera un <code>redirect-code</code> hacia el frontend seleccionado.
+Se genera un <code>redirect-code</code> temporal hacia el frontend seleccionado.
 
 </td>
 </tr>
@@ -258,11 +267,11 @@ Login, activación de cuenta, recuperación y restablecimiento de contraseña.
 
 <br /><br />
 
-Configuración mediante QR y validación de códigos de seis dígitos.
+Configuración mediante QR, clave manual y validación de códigos temporales.
 
 <br /><br />
 
-<code>setup</code> · <code>verify</code> · <code>OTP</code>
+<code>setup</code> · <code>verify</code> · <code>TOTP</code>
 
 </td>
 <td width="33%" valign="top">
@@ -271,7 +280,7 @@ Configuración mediante QR y validación de códigos de seis dígitos.
 
 <br /><br />
 
-Control de inactividad, access token en memoria y cierre sincronizado.
+Control de inactividad, access token en memoria, refresh HttpOnly y cierre sincronizado.
 
 <br /><br />
 
@@ -299,7 +308,7 @@ Consulta de módulos disponibles y acciones autorizadas por usuario.
 
 <br /><br />
 
-Guards, destinos controlados y entrega mediante <code>redirect-code</code>.
+Guards, destinos controlados y handoff mediante <code>redirect-code</code>.
 
 <br /><br />
 
@@ -324,6 +333,139 @@ Información administrativa y estado de seguridad de la cuenta.
 
 ---
 
+## 🔐 Seguridad y Auth v2
+
+La integración actual de Login Access implementa el contrato **Auth v2** del Ecosistema Integral DGCP.
+
+El objetivo es mantener las credenciales de sesión sensibles fuera de los mecanismos de almacenamiento accesibles por JavaScript.
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+<strong>🧠 Access token</strong>
+
+<br /><br />
+
+El access token vive únicamente en memoria y se utiliza mediante
+<code>Authorization: Bearer</code>.
+
+<br /><br />
+
+<code>memory-only</code> · <code>Bearer</code>
+
+</td>
+<td width="33%" valign="top">
+
+<strong>🍪 Refresh token</strong>
+
+<br /><br />
+
+El refresh token permanece en una cookie <code>HttpOnly</code> administrada por backend.
+
+<br /><br />
+
+<code>HttpOnly</code> · <code>credentials</code>
+
+</td>
+<td width="33%" valign="top">
+
+<strong>🔄 Restauración</strong>
+
+<br /><br />
+
+Después de un F5, la sesión se recupera mediante <code>POST /auth/refresh</code>.
+
+<br /><br />
+
+<code>cookie-first</code> · <code>single-flight</code>
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+<strong>🛡️ Web Storage</strong>
+
+<br /><br />
+
+Access y refresh tokens no se almacenan en <code>localStorage</code> ni <code>sessionStorage</code>.
+
+<br /><br />
+
+<code>zero token persistence</code>
+
+</td>
+<td width="33%" valign="top">
+
+<strong>↗️ SSO</strong>
+
+<br /><br />
+
+Los módulos reciben un <code>redirect-code</code> temporal y lo intercambian por su propia sesión.
+
+<br /><br />
+
+<code>redirect-code</code> · <code>exchange-code</code>
+
+</td>
+<td width="33%" valign="top">
+
+<strong>🚪 Logout</strong>
+
+<br /><br />
+
+El cierre de sesión revoca la sesión backend y elimina la cookie de renovación.
+
+<br /><br />
+
+<code>revoke</code> · <code>clear session</code>
+
+</td>
+</tr>
+</table>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Access_token-memory_only-059669?style=flat-square" alt="Access token solo en memoria" />
+  <img src="https://img.shields.io/badge/Refresh-HttpOnly_cookie-2563EB?style=flat-square" alt="Refresh mediante cookie HttpOnly" />
+  <img src="https://img.shields.io/badge/Web_Storage-zero_tokens-7C3AED?style=flat-square" alt="Cero tokens en Web Storage" />
+  <img src="https://img.shields.io/badge/SSO-redirect--code-F59E0B?style=flat-square" alt="SSO mediante redirect-code" />
+</p>
+
+### Flujo Auth v2
+
+```text
+Login
+  │
+  ▼
+POST /auth/login
+  │
+  ▼
+MFA / TOTP
+  │
+  ▼
+POST /auth/login/2fa
+  │
+  ├── access token → memoria
+  └── refresh token → cookie HttpOnly
+  │
+  ▼
+Accesos disponibles
+  │
+  ▼
+POST /auth/redirect-code
+  │
+  ▼
+Frontend autorizado
+  │
+  ▼
+POST /auth/exchange-code
+```
+
+El frontend **no solicita, lee ni persiste directamente el refresh token**.
+
+---
+
 ## 🛠️ Stack tecnológico
 
 <div align="center">
@@ -338,10 +480,10 @@ Información administrativa y estado de seguridad de la cuenta.
 <br />
 <br />
 
-<img src="https://img.shields.io/badge/React-19.2.8-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19.2.8" />
-<img src="https://img.shields.io/badge/TypeScript-6.0.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 6.0.3" />
-<img src="https://img.shields.io/badge/Vite-8.2.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8.2.0" />
-<img src="https://img.shields.io/badge/Tailwind_CSS-4.3.3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4.3.3" />
+<img src="https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
+<img src="https://img.shields.io/badge/TypeScript-6-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 6" />
+<img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8" />
+<img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
 
 </div>
 
@@ -355,12 +497,12 @@ Información administrativa y estado de seguridad de la cuenta.
 
 <br /><br />
 
-<img src="https://img.shields.io/badge/React_Router-8.3.0-CA4245?style=flat-square&logo=reactrouter&logoColor=white" alt="React Router 8.3.0" />
-<img src="https://img.shields.io/badge/TanStack_Query-5.101.4-FF4154?style=flat-square&logo=reactquery&logoColor=white" alt="TanStack Query 5.101.4" />
-<img src="https://img.shields.io/badge/Zustand-5.0.14-443E38?style=flat-square" alt="Zustand 5.0.14" />
-<img src="https://img.shields.io/badge/React_Hook_Form-7.84.0-EC5990?style=flat-square&logo=reacthookform&logoColor=white" alt="React Hook Form 7.84.0" />
-<img src="https://img.shields.io/badge/Zod-4.4.3-3E67B1?style=flat-square" alt="Zod 4.4.3" />
-<img src="https://img.shields.io/badge/Axios-1.19.0-5A29E4?style=flat-square&logo=axios&logoColor=white" alt="Axios 1.19.0" />
+<img src="https://img.shields.io/badge/React_Router-navigation-CA4245?style=flat-square&logo=reactrouter&logoColor=white" alt="React Router" />
+<img src="https://img.shields.io/badge/TanStack_Query-data-FF4154?style=flat-square&logo=reactquery&logoColor=white" alt="TanStack Query" />
+<img src="https://img.shields.io/badge/Zustand-state-443E38?style=flat-square" alt="Zustand" />
+<img src="https://img.shields.io/badge/React_Hook_Form-forms-EC5990?style=flat-square&logo=reacthookform&logoColor=white" alt="React Hook Form" />
+<img src="https://img.shields.io/badge/Zod-validation-3E67B1?style=flat-square" alt="Zod" />
+<img src="https://img.shields.io/badge/Axios-HTTP-5A29E4?style=flat-square&logo=axios&logoColor=white" alt="Axios" />
 
 </td>
 <td width="50%" valign="top">
@@ -369,10 +511,11 @@ Información administrativa y estado de seguridad de la cuenta.
 
 <br /><br />
 
-<img src="https://img.shields.io/badge/Radix_UI-161618?style=flat-square&logo=radixui&logoColor=white" alt="Radix UI" />
-<img src="https://img.shields.io/badge/Lucide_React-0.536.0-F56565?style=flat-square&logo=lucide&logoColor=white" alt="Lucide React 0.536.0" />
-<img src="https://img.shields.io/badge/Font_Awesome-7.3.1-538DD7?style=flat-square&logo=fontawesome&logoColor=white" alt="Font Awesome 7.3.1" />
-<img src="https://img.shields.io/badge/Motion-12.43.0-FFF312?style=flat-square&logo=framer&logoColor=111111" alt="Motion 12.43.0" />
+<img src="https://img.shields.io/badge/Radix_UI-primitives-161618?style=flat-square&logo=radixui&logoColor=white" alt="Radix UI" />
+<img src="https://img.shields.io/badge/Lucide_React-icons-F56565?style=flat-square&logo=lucide&logoColor=white" alt="Lucide React" />
+<img src="https://img.shields.io/badge/Font_Awesome-icons-538DD7?style=flat-square&logo=fontawesome&logoColor=white" alt="Font Awesome" />
+<img src="https://img.shields.io/badge/Motion-interaction-FFF312?style=flat-square&logo=framer&logoColor=111827" alt="Motion" />
+<img src="https://img.shields.io/badge/Sonner-feedback-111827?style=flat-square" alt="Sonner" />
 
 </td>
 </tr>
@@ -383,11 +526,11 @@ Información administrativa y estado de seguridad de la cuenta.
 
 <br /><br />
 
-<img src="https://img.shields.io/badge/Vitest-4.1.10-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Vitest 4.1.10" />
-<img src="https://img.shields.io/badge/Playwright-1.62.1-2EAD33?style=flat-square&logo=playwright&logoColor=white" alt="Playwright 1.62.1" />
-<img src="https://img.shields.io/badge/ESLint-9.39.5-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint 9.39.5" />
-<img src="https://img.shields.io/badge/Prettier-3.9.6-F7B93E?style=flat-square&logo=prettier&logoColor=111827" alt="Prettier 3.9.6" />
-<img src="https://img.shields.io/badge/React_Doctor-Auditor%C3%ADa-22C55E?style=flat-square&logo=react&logoColor=white" alt="React Doctor" />
+<img src="https://img.shields.io/badge/Vitest-unit_tests-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Vitest" />
+<img src="https://img.shields.io/badge/Playwright-E2E-2EAD33?style=flat-square&logo=playwright&logoColor=white" alt="Playwright" />
+<img src="https://img.shields.io/badge/ESLint-quality-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint" />
+<img src="https://img.shields.io/badge/Prettier-format-F7B93E?style=flat-square&logo=prettier&logoColor=111827" alt="Prettier" />
+<img src="https://img.shields.io/badge/React_Doctor-100%2F100-22C55E?style=flat-square&logo=react&logoColor=white" alt="React Doctor 100 de 100" />
 
 </td>
 <td width="50%" valign="top">
@@ -454,6 +597,168 @@ src/
   <img src="https://img.shields.io/badge/Component--driven-UI-06B6D4?style=flat-square&logo=react&logoColor=white" alt="Component driven UI" />
   <img src="https://img.shields.io/badge/Typed-contracts-059669?style=flat-square" alt="Typed contracts" />
 </p>
+
+---
+
+## ⚙️ Configuración
+
+La configuración local se basa en `.env.example`.
+
+Variables públicas contempladas por el frontend:
+
+```env
+VITE_API_URL=
+VITE_ENABLE_MOCKS=
+VITE_MESA_AYUDA_URL=
+VITE_FORMATO_NNA_URL=
+VITE_DIRECTORIO_PROCURADORES_URL=
+VITE_CONTROL_AGENDA_URL=
+VITE_ADMIN_URL=
+VITE_POR_TUS_DERECHOS_URL=
+VITE_GOBMX_SEARCH_URL=
+VITE_FORMATO_NNA_PUBLIC_URL=
+```
+
+> `.env`, `.env.local`, contraseñas, semillas TOTP, JWT y demás secretos no deben incorporarse al repositorio.
+
+---
+
+## 🧪 Calidad
+
+Login Access cuenta con un quality gate reproducible para validar código, estructura, encoding, pruebas y build.
+
+<table>
+<tr>
+<td width="25%" align="center" valign="top">
+
+<strong>Encoding</strong>
+
+<br /><br />
+
+UTF-8 sin BOM y validación explícita contra mojibake.
+
+<br /><br />
+
+<code>validate:encoding</code>
+
+</td>
+<td width="25%" align="center" valign="top">
+
+<strong>Static analysis</strong>
+
+<br /><br />
+
+TypeScript, ESLint y Prettier.
+
+<br /><br />
+
+<code>typecheck</code> · <code>lint</code>
+
+</td>
+<td width="25%" align="center" valign="top">
+
+<strong>Testing</strong>
+
+<br /><br />
+
+Pruebas unitarias y escenario E2E con autenticación real.
+
+<br /><br />
+
+<code>Vitest</code> · <code>Playwright</code>
+
+</td>
+<td width="25%" align="center" valign="top">
+
+<strong>React</strong>
+
+<br /><br />
+
+Auditoría estructural y de buenas prácticas.
+
+<br /><br />
+
+<code>React Doctor 100/100</code>
+
+</td>
+</tr>
+</table>
+
+### Quality gate
+
+```bash
+npm run quality
+```
+
+Ejecuta:
+
+```text
+Encoding
+   ↓
+Prettier
+   ↓
+Structure
+   ↓
+TypeScript
+   ↓
+ESLint
+   ↓
+Vitest
+   ↓
+Build
+   ↓
+React Doctor
+```
+
+### Validaciones independientes
+
+```bash
+npm run validate:encoding
+npm run format:check
+npm run validate:structure
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+npm run doctor
+```
+
+### E2E real
+
+```bash
+npm run test:e2e:real
+```
+
+El escenario certificado cubre:
+
+```text
+Login
+→ MFA
+→ sesión
+→ accesos
+→ redirect-code
+→ exchange-code
+→ Mesa de Ayuda
+→ refresh
+→ F5
+→ restauración de sesión
+→ logout
+→ ruta protegida
+```
+
+Estado actual:
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Encoding-PASS-22C55E?style=flat-square" alt="Encoding PASS" />
+  <img src="https://img.shields.io/badge/TypeScript-PASS-22C55E?style=flat-square" alt="TypeScript PASS" />
+  <img src="https://img.shields.io/badge/ESLint-PASS-22C55E?style=flat-square" alt="ESLint PASS" />
+  <img src="https://img.shields.io/badge/Vitest-32%2F32-22C55E?style=flat-square&logo=vitest&logoColor=white" alt="32 de 32 pruebas" />
+  <img src="https://img.shields.io/badge/E2E_real-PASS-22C55E?style=flat-square&logo=playwright&logoColor=white" alt="E2E real PASS" />
+  <img src="https://img.shields.io/badge/React_Doctor-100%2F100-22C55E?style=flat-square&logo=react&logoColor=white" alt="React Doctor 100 de 100" />
+  <img src="https://img.shields.io/badge/npm_audit_prod-0-22C55E?style=flat-square&logo=npm&logoColor=white" alt="npm audit producción cero vulnerabilidades" />
+</p>
+
+> Las credenciales utilizadas por los E2E reales son configuración local sensible y nunca deben formar parte del repositorio.
 
 ---
 
