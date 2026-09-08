@@ -1,18 +1,19 @@
 import { Bell } from "lucide-react";
 
-import { Logo } from "@/components/ui/logo";
 import { UserProfileMenu } from "@/components/layout/user-profile-menu";
+import { Logo } from "@/components/ui/logo";
 import { useAuthStore } from "@/features/auth/model/auth.store";
 
-const formatoNnaPublicUrl =
-  import.meta.env.VITE_FORMATO_NNA_PUBLIC_URL?.trim() || "http://127.0.0.1:5176";
+const formatoNnaPublicUrl = import.meta.env.VITE_FORMATO_NNA_PUBLIC_URL?.trim() || "";
 
 const navigationItems = [
   { label: "Dashboard", href: "#dashboard" },
   { label: "Por Tus Derechos", href: "#por-tus-derechos" },
   { label: "Micrositio", href: "#micrositio" },
   { label: "Agenda", href: "#agenda" },
-  { label: "Formato de Atenciones NNA", href: formatoNnaPublicUrl },
+  ...(formatoNnaPublicUrl
+    ? [{ label: "Formato de Atenciones NNA", href: formatoNnaPublicUrl }]
+    : []),
 ] as const;
 
 /**

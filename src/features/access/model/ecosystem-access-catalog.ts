@@ -100,6 +100,16 @@ function restrictedAccess(definition: EcosystemAccessDefinition): AccessItem {
 }
 
 function normalizeAccess(access: AccessItem, definition: EcosystemAccessDefinition): AccessItem {
+  if (!access.target_url.trim()) {
+    return {
+      ...restrictedAccess(definition),
+      permissions: access.permissions,
+      visiblePermissions: access.visiblePermissions,
+      badgeLabel: "Pendiente de despliegue",
+      buttonLabel: "No disponible",
+    };
+  }
+
   return {
     ...access,
     id: definition.id,

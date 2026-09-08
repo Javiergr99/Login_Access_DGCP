@@ -20,11 +20,22 @@ const configuredDestinations: Record<RedirectDestinationId, string> = {
 };
 
 export function getRedirectDestination(destinationId: RedirectDestinationId): string {
-  return normalizeRedirectUrl(configuredDestinations[destinationId]);
+  const configured = configuredDestinations[destinationId].trim();
+
+  return configured ? normalizeRedirectUrl(configured) : "";
 }
 
 export function getConfiguredRedirectDestinations(): string[] {
-  const destinations = REDIRECT_DESTINATION_IDS.map(getRedirectDestination);
+  const destinations: string[] = [];
+
+  for (const destinationId of REDIRECT_DESTINATION_IDS) {
+    const destination = getRedirectDestination(destinationId);
+
+    if (destination) {
+      destinations.push(destination);
+    }
+  }
+
   const uniqueDestinations = new Set(destinations);
 
   if (uniqueDestinations.size !== destinations.length) {

@@ -26,7 +26,12 @@
     "validate:structure": "node scripts/validate-structure.mjs",
     "quality": "npm run validate:encoding && npm run format:check && npm run validate:structure && npm run typecheck && npm run lint && npm run test && npm run build && npm run doctor",
     "redirects:allowlist": "node scripts/print-redirect-allowlist.mjs",
-    "redirects:validate": "node scripts/print-redirect-allowlist.mjs"
+    "redirects:validate": "node scripts/print-redirect-allowlist.mjs",
+    "validate:env:production": "node scripts/validate-production-env.mjs",
+    "test:env:production": "node --test tests/production-env-validator.node-check.mjs",
+    "build:production": "npm run validate:env:production && tsc -b && vite build --mode production && npm run validate:bundle:production",
+    "preview:server": "vite preview --host 0.0.0.0 --port 5174 --strictPort",
+    "validate:bundle:production": "node scripts/validate-production-bundle.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
