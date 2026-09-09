@@ -24,6 +24,12 @@ type AccessCardProps = {
   animationIndex?: number;
 };
 
+function getAccessToneClassName(access: AccessItem): string {
+  return access.target_app === "CONTROL_AGENDA_NACIONAL"
+    ? "access-tone-cyan"
+    : toneClassNames[access.tone];
+}
+
 function getAccessCardState(access: AccessItem, isNavigationLocked: boolean, isEntering: boolean) {
   return {
     disabled: access.access_level === "restricted" || (isNavigationLocked && !isEntering),
@@ -142,7 +148,7 @@ export function AccessCard({
         whileTap={motion.whileTap}
         transition={motion.transition}
         className={cn(
-          toneClassNames[access.tone],
+          getAccessToneClassName(access),
           "group relative flex min-h-[286px] flex-col overflow-hidden rounded-[var(--radius-lg)] border",
           "border-[var(--color-border)] bg-[var(--color-surface)] p-[18px]",
           "shadow-[var(--shadow-access-card)] transition-[border-color,box-shadow] duration-200",

@@ -1,5 +1,5 @@
 /* =========================================================
-   TEMA PRIVADO: MESA DE AYUDA 2.0
+TEMA PRIVADO: MESA DE AYUDA 2.0
    Se usa en /accesos y en los módulos operativos.
    ========================================================= */
 
@@ -160,6 +160,19 @@
   --accent-color-soft: var(--palette-blue-50);
   --accent-color-border: var(--palette-blue-200);
   --accent-color-decoration: var(--palette-blue-200);
+}
+
+.access-tone-cyan {
+  --accent-color: #0891b2;
+  --accent-color-hover: #0e7490;
+  --accent-color-soft: #ecfeff;
+  --accent-color-border: #a5f3fc;
+  --accent-color-decoration: #a5f3fc;
+}
+
+.access-tone-cyan .badge-tone-blue {
+  --badge-background: #ecfeff;
+  --badge-foreground: #0e7490;
 }
 
 .access-tone-violet {
