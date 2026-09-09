@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ecosistema Integral DGCP">
+  <rect width="64" height="64" rx="14" fill="#7a1738"/>
+  <rect x="16" y="16" width="13" height="13" rx="3" fill="#ffffff"/>
+  <rect x="35" y="16" width="13" height="13" rx="3" fill="#ffffff" opacity=".88"/>
+  <rect x="16" y="35" width="13" height="13" rx="3" fill="#ffffff" opacity=".88"/>
+  <rect x="35" y="35" width="13" height="13" rx="3" fill="#ffffff"/>
+  <path d="M29 22.5h6M22.5 29v6M41.5 29v6M29 41.5h6" stroke="#d6b77a" stroke-width="3" stroke-linecap="round"/>
+</svg>

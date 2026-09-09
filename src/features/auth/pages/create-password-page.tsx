@@ -125,8 +125,8 @@ export function CreatePasswordPage() {
                 </div>
 
                 <p className="mt-4 text-[13px] leading-5.5 text-slate-600 sm:text-sm sm:leading-6">
-                  Configura la contraseña que utilizarás para ingresar a tu cuenta de Mesa de Ayuda
-                  2.0.
+                  Configura la contraseña que utilizarás para ingresar a tu cuenta del Ecosistema
+                  Integral DGCP 2.0.
                 </p>
 
                 <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[color-mix(in_srgb,var(--color-primary)_12%,#e2e8f0)] bg-[color-mix(in_srgb,var(--color-primary)_4%,white)] px-3.5 py-3">

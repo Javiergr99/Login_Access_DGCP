@@ -10,7 +10,7 @@ const AUTH_HERO_IMAGE = "/assets/images/NNAS.jpg";
 export function AuthHero() {
   return (
     <section
-      aria-label="Presentación de Mesa de Ayuda 2.0"
+      aria-label="Presentación del Ecosistema Integral DGCP"
       className={[
         "relative hidden min-h-0 overflow-hidden bg-slate-950",
         "lg:flex lg:flex-col lg:justify-end",
@@ -73,7 +73,7 @@ export function AuthHero() {
               "xl:text-[40px]",
             ].join(" ")}
           >
-            Mesa de Ayuda 2.0
+            Ecosistema Integral DGCP
           </h1>
 
           <p
