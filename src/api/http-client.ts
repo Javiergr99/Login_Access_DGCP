@@ -18,11 +18,14 @@ const AUTH_PATHS_WITHOUT_REFRESH = [
   "/auth/refresh",
   "/auth/logout",
   "/auth/recover-password",
-  "/auth/reset-password",
+  "/auth/restablecer-password",
   "/users/crear-password",
 ] as const;
 
-const AUTH_PATHS_WITHOUT_ACCESS_TOKEN = ["/users/crear-password"] as const;
+const AUTH_PATHS_WITHOUT_ACCESS_TOKEN = [
+  "/auth/restablecer-password",
+  "/users/crear-password",
+] as const;
 
 export const httpClient = axios.create({
   baseURL: env.apiUrl,

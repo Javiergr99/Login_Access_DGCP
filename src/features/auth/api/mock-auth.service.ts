@@ -1,7 +1,6 @@
 import { ApiError } from "@/api/api-error";
 import type {
   AppAction,
-  CreatePasswordResponse,
   EnableTwoFactorRequest,
   EnableTwoFactorResponse,
   GetCurrentUserResponse,
@@ -223,10 +222,5 @@ export const mockAuthService = {
   async resetPassword(): Promise<ResetPasswordResponse> {
     await delay(600);
     return { message: "Contraseña actualizada" };
-  },
-
-  async createPassword(): Promise<CreatePasswordResponse> {
-    await delay(600);
-    return { message: "Contraseña creada" };
   },
 };

@@ -1,7 +1,5 @@
 import { httpClient, refreshSessionWithCookie } from "@/api/http-client";
 import type {
-  CreatePasswordRequest,
-  CreatePasswordResponse,
   EnableTwoFactorRequest,
   EnableTwoFactorResponse,
   GetCurrentUserResponse,
@@ -37,7 +35,6 @@ export type AuthService = {
   logout(): Promise<LogoutResponse>;
   recoverPassword(input: RecoverPasswordRequest): Promise<RecoverPasswordResponse>;
   resetPassword(input: ResetPasswordRequest): Promise<ResetPasswordResponse>;
-  createPassword(input: CreatePasswordRequest): Promise<CreatePasswordResponse>;
 };
 
 function rememberSessionHeaders(rememberSession = false) {
@@ -104,12 +101,10 @@ export const httpAuthService: AuthService = {
   },
 
   async resetPassword(input) {
-    const response = await httpClient.post<ResetPasswordResponse>("/auth/reset-password", input);
-    return response.data;
-  },
-
-  async createPassword(input) {
-    const response = await httpClient.post<CreatePasswordResponse>("/auth/create-password", input);
+    const response = await httpClient.post<ResetPasswordResponse>(
+      "/auth/restablecer-password",
+      input,
+    );
     return response.data;
   },
 };

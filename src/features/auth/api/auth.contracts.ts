@@ -245,9 +245,3 @@ export interface ResetPasswordRequest {
   password_nueva: string;
 }
 export type ResetPasswordResponse = SuccessResponse;
-
-export interface CreatePasswordRequest {
-  token: string;
-  password: string;
-}
-export type CreatePasswordResponse = SuccessResponse;

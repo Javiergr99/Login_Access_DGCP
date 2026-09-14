@@ -109,6 +109,19 @@ export const router = createBrowserRouter([
           </PublicOnlyRoute>
         ),
       },
+      // Ruta canónica publicada por auth_service en los correos de recuperación.
+      {
+        path: "restablecer-password",
+        element: (
+          <PublicOnlyRoute>
+            <DeferredRoute>
+              <ResetPasswordPage />
+            </DeferredRoute>
+          </PublicOnlyRoute>
+        ),
+      },
+
+      // Alias temporal para conservar compatibilidad con enlaces locales anteriores.
       {
         path: "restablecer-contrasena",
         element: (
