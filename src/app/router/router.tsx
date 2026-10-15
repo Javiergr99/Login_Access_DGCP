@@ -119,6 +119,16 @@ export const router = createBrowserRouter([
           </PublicOnlyRoute>
         ),
       },
+      {
+        path: "restablecer-password",
+        element: (
+          <PublicOnlyRoute>
+            <DeferredRoute>
+              <ResetPasswordPage />
+            </DeferredRoute>
+          </PublicOnlyRoute>
+        ),
+      },
 
       // Activación inicial de cuenta.
       // Esta ruta es pública y no debe depender de una sesión previa.
