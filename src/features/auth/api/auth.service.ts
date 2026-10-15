@@ -6,8 +6,6 @@ import type {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
-  RecoverPasswordRequest,
-  RecoverPasswordResponse,
   RefreshSessionResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
@@ -33,7 +31,6 @@ export type AuthService = {
   getCurrentUser(): Promise<GetCurrentUserResponse>;
   refreshSession(): Promise<RefreshSessionResponse>;
   logout(): Promise<LogoutResponse>;
-  recoverPassword(input: RecoverPasswordRequest): Promise<RecoverPasswordResponse>;
   resetPassword(input: ResetPasswordRequest): Promise<ResetPasswordResponse>;
 };
 
@@ -89,14 +86,6 @@ export const httpAuthService: AuthService = {
 
   async logout() {
     const response = await httpClient.post<LogoutResponse>("/auth/logout");
-    return response.data;
-  },
-
-  async recoverPassword(input) {
-    const response = await httpClient.post<RecoverPasswordResponse>(
-      "/auth/recover-password",
-      input,
-    );
     return response.data;
   },
 

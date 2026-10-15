@@ -4,7 +4,7 @@ import { KeyRound } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useSearchParams } from "react-router";
 
-import { getApiErrorMessage, getFirstFieldError } from "@/api/api-error";
+import { getFirstFieldError, normalizeApiError } from "@/api/api-error";
 import { AuthCard } from "@/components/layout/auth-card";
 import { AuthLayout } from "@/components/layout/auth-layout";
 import { Alert } from "@/components/ui/alert";
@@ -32,17 +32,56 @@ export function ResetPasswordPage() {
     form.clearErrors();
 
     try {
-      const response = await resetMutation.mutateAsync({
+      await resetMutation.mutateAsync({
         token,
         password_nueva: values.password,
       });
-      setSuccessMessage(response.message);
+      setSuccessMessage(
+        "Tu contraseña se actualizó correctamente. Ya puedes iniciar sesión con tu nueva contraseña.",
+      );
       form.reset();
     } catch (error) {
       const passwordError =
         getFirstFieldError(error, "password_nueva") ?? getFirstFieldError(error, "password");
       if (passwordError) form.setError("password", { message: passwordError });
-      setGeneralError(getApiErrorMessage(error, "No fue posible actualizar la contraseña."));
+      const normalized = normalizeApiError(error);
+
+      switch (normalized.status) {
+        case 400:
+          setGeneralError(
+            "El enlace de recuperación no es válido, ya fue utilizado o no puede procesarse.",
+          );
+          break;
+
+        case 401:
+          setGeneralError(
+            "El enlace de recuperación expiró o ya no es válido. Solicita apoyo a un administrador para iniciar un nuevo proceso.",
+          );
+          break;
+
+        case 403:
+          setGeneralError("No fue posible autorizar esta solicitud de restablecimiento.");
+          break;
+
+        case 404:
+          setGeneralError(
+            "El enlace de recuperación no es válido o ya no se encuentra disponible.",
+          );
+          break;
+
+        case 422:
+          setGeneralError("Revisa la nueva contraseña e inténtalo nuevamente.");
+          break;
+
+        case 429:
+          setGeneralError(
+            "Se realizaron demasiados intentos. Espera unos minutos antes de volver a intentarlo.",
+          );
+          break;
+
+        default:
+          setGeneralError("No fue posible actualizar la contraseña. Inténtalo nuevamente.");
+      }
     }
   });
 
@@ -56,11 +95,11 @@ export function ResetPasswordPage() {
         {!token ? (
           <div className="space-y-5">
             <Alert tone="error" title="Enlace no válido">
-              El enlace no contiene un token de recuperación. Solicita uno nuevo desde la pantalla
-              de recuperación.
+              El enlace no contiene un token de recuperación válido. Solicita apoyo a un
+              administrador autorizado para iniciar un nuevo proceso de recuperación.
             </Alert>
             <Button asChild fullWidth size="lg">
-              <Link to="/recuperar-acceso">Solicitar un nuevo enlace</Link>
+              <Link to="/login">Regresar al inicio de sesión</Link>
             </Button>
           </div>
         ) : successMessage ? (
