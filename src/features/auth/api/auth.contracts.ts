@@ -234,17 +234,11 @@ export type RefreshSessionResponse = TokenResponse;
 
 export type LogoutResponse = SuccessResponse;
 
-/** Flujos heredados que siguen presentes en la interfaz visual. */
-export interface RecoverPasswordRequest {
-  email: string;
-}
-export type RecoverPasswordResponse = SuccessResponse;
-
 export interface ResetPasswordRequest {
   token: string;
   password_nueva: string;
 }
-export type ResetPasswordResponse = SuccessResponse;
+export type ResetPasswordResponse = unknown;
 
 export interface CreatePasswordRequest {
   token: string;

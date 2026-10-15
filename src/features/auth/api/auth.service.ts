@@ -8,8 +8,6 @@ import type {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
-  RecoverPasswordRequest,
-  RecoverPasswordResponse,
   RefreshSessionResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
@@ -35,7 +33,6 @@ export type AuthService = {
   getCurrentUser(): Promise<GetCurrentUserResponse>;
   refreshSession(): Promise<RefreshSessionResponse>;
   logout(): Promise<LogoutResponse>;
-  recoverPassword(input: RecoverPasswordRequest): Promise<RecoverPasswordResponse>;
   resetPassword(input: ResetPasswordRequest): Promise<ResetPasswordResponse>;
   createPassword(input: CreatePasswordRequest): Promise<CreatePasswordResponse>;
 };
@@ -95,16 +92,11 @@ export const httpAuthService: AuthService = {
     return response.data;
   },
 
-  async recoverPassword(input) {
-    const response = await httpClient.post<RecoverPasswordResponse>(
-      "/auth/recover-password",
+  async resetPassword(input) {
+    const response = await httpClient.post<ResetPasswordResponse>(
+      "/auth/restablecer-password",
       input,
     );
-    return response.data;
-  },
-
-  async resetPassword(input) {
-    const response = await httpClient.post<ResetPasswordResponse>("/auth/reset-password", input);
     return response.data;
   },
 
