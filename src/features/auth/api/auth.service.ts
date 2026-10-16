@@ -6,8 +6,6 @@ import type {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
-  RecoverPasswordRequest,
-  RecoverPasswordResponse,
   RefreshSessionResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
@@ -21,19 +19,25 @@ import { env } from "@/shared/config/env";
 
 export type AuthService = {
   login(input: LoginRequest): Promise<LoginResponse>;
+
   setupTwoFactor(input: TempTokenRequest): Promise<TwoFactorSetupResponse>;
+
   verifyTwoFactor(
     input: VerifyTwoFactorRequest,
     rememberSession?: boolean,
   ): Promise<VerifyTwoFactorResponse>;
+
   enableTwoFactor(
     input: EnableTwoFactorRequest,
     rememberSession?: boolean,
   ): Promise<EnableTwoFactorResponse>;
+
   getCurrentUser(): Promise<GetCurrentUserResponse>;
+
   refreshSession(): Promise<RefreshSessionResponse>;
+
   logout(): Promise<LogoutResponse>;
-  recoverPassword(input: RecoverPasswordRequest): Promise<RecoverPasswordResponse>;
+
   resetPassword(input: ResetPasswordRequest): Promise<ResetPasswordResponse>;
 };
 
@@ -61,6 +65,7 @@ export const httpAuthService: AuthService = {
 
   async setupTwoFactor(input) {
     const response = await httpClient.post<TwoFactorSetupResponse>("/auth/setup", input);
+
     return response.data;
   },
 
@@ -68,6 +73,7 @@ export const httpAuthService: AuthService = {
     const response = await httpClient.post<VerifyTwoFactorResponse>("/auth/login/2fa", input, {
       headers: rememberSessionHeaders(rememberSession),
     });
+
     return response.data;
   },
 
@@ -75,11 +81,13 @@ export const httpAuthService: AuthService = {
     const response = await httpClient.post<EnableTwoFactorResponse>("/auth/enable", input, {
       headers: rememberSessionHeaders(rememberSession),
     });
+
     return response.data;
   },
 
   async getCurrentUser() {
     const response = await httpClient.get<GetCurrentUserResponse>("/users/me");
+
     return response.data;
   },
 
@@ -89,14 +97,7 @@ export const httpAuthService: AuthService = {
 
   async logout() {
     const response = await httpClient.post<LogoutResponse>("/auth/logout");
-    return response.data;
-  },
 
-  async recoverPassword(input) {
-    const response = await httpClient.post<RecoverPasswordResponse>(
-      "/auth/recover-password",
-      input,
-    );
     return response.data;
   },
 
@@ -105,6 +106,7 @@ export const httpAuthService: AuthService = {
       "/auth/restablecer-password",
       input,
     );
+
     return response.data;
   },
 };

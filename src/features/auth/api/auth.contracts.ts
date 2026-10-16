@@ -1,9 +1,9 @@
 /**
  * Contrato de integración validado contra auth_service v2.0.
  *
- * Fuente funcional: contrato técnico Auth v2.0 del 06 de septiembre de 2026. Los identificadores
- * técnicos de permisos se consumen por nombre; los UUID no se usan para
- * decidir visibilidad o autorización en el frontend.
+ * Fuente funcional: contrato técnico Auth v2.0 del 06 de septiembre de 2026.
+ * Los identificadores técnicos de permisos se consumen por nombre; los UUID
+ * no se usan para decidir visibilidad o autorización en el frontend.
  */
 
 export type ApiErrorCode =
@@ -163,11 +163,13 @@ export interface UsuarioAutenticado {
 
 /** Alias conservado para evitar romper componentes existentes. */
 export type UserWithPermissionsRead = UsuarioAutenticado;
+
 export type GetCurrentUserResponse = UsuarioAutenticado;
 
 export interface LoginRequest {
   curp: string;
   password: string;
+
   /** Preferencia no sensible que se propaga al cierre del flujo MFA. */
   remember_session?: boolean;
 }
@@ -207,6 +209,7 @@ export interface TempTokenVerifyRequest {
 }
 
 export type VerifyTwoFactorRequest = TempTokenVerifyRequest;
+
 export type EnableTwoFactorRequest = TempTokenVerifyRequest;
 
 export interface TokenResponse {
@@ -215,6 +218,7 @@ export interface TokenResponse {
 }
 
 export type VerifyTwoFactorResponse = TokenResponse;
+
 export type EnableTwoFactorResponse = TokenResponse;
 
 export interface RedirectCodeRequest {
@@ -234,14 +238,18 @@ export type RefreshSessionResponse = TokenResponse;
 
 export type LogoutResponse = SuccessResponse;
 
-/** Flujos heredados que siguen presentes en la interfaz visual. */
-export interface RecoverPasswordRequest {
-  email: string;
-}
-export type RecoverPasswordResponse = SuccessResponse;
-
+/**
+ * Restablecimiento de contraseña mediante token.
+ *
+ * Endpoint:
+ * POST /auth/restablecer-password
+ */
 export interface ResetPasswordRequest {
   token: string;
   password_nueva: string;
 }
-export type ResetPasswordResponse = SuccessResponse;
+
+/**
+ * No se presupone una estructura concreta de respuesta.
+ */
+export type ResetPasswordResponse = unknown;

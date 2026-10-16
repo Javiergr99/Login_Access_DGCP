@@ -7,7 +7,6 @@ import type {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
-  RecoverPasswordResponse,
   RefreshSessionResponse,
   ResetPasswordResponse,
   TempTokenRequest,
@@ -210,13 +209,6 @@ export const mockAuthService = {
   async logout(): Promise<LogoutResponse> {
     await delay(180);
     return { message: "Sesión cerrada correctamente." };
-  },
-
-  async recoverPassword(): Promise<RecoverPasswordResponse> {
-    await delay(600);
-    return {
-      message: "Si el correo está registrado, recibirás instrucciones para recuperar tu acceso.",
-    };
   },
 
   async resetPassword(): Promise<ResetPasswordResponse> {

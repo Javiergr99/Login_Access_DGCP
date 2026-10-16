@@ -17,7 +17,6 @@ const AUTH_PATHS_WITHOUT_REFRESH = [
   "/auth/enable",
   "/auth/refresh",
   "/auth/logout",
-  "/auth/recover-password",
   "/auth/restablecer-password",
   "/users/crear-password",
 ] as const;
