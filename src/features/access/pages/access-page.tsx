@@ -127,7 +127,7 @@ function AccessLoadingGrid() {
 
 function AccessErrorState({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-[var(--palette-red-200)] bg-[var(--color-surface)] p-10 text-center">
+    <div className="rounded-[var(--radius-lg)] border border-[var(--palette-red-200)] bg-[var(--color-surface)] p-5 text-center sm:p-10">
       <Typography as="h3" variant="cardTitle">
         No fue posible construir sus accesos
       </Typography>
@@ -144,7 +144,7 @@ function AccessErrorState({ error, onRetry }: { error: unknown; onRetry: () => v
 
 function AccessEmptyState() {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-10 text-center">
+    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-center sm:p-10">
       <Typography as="h3" variant="cardTitle">
         Sin áreas asignadas
       </Typography>
@@ -242,7 +242,7 @@ function AccessSection({
 }) {
   return (
     <section className="mt-5" aria-labelledby="access-title">
-      <div className="mb-3 flex items-center justify-between gap-4">
+      <div className="mb-3 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div>
           <Typography as="h2" id="access-title" variant="sectionTitle">
             Áreas autorizadas
@@ -252,7 +252,7 @@ function AccessSection({
             a su cuenta.
           </Typography>
         </div>
-        <span className="rounded-full bg-[var(--color-primary-soft)] px-3 py-1.5 text-[11px] font-semibold-token text-[var(--color-primary)]">
+        <span className="inline-flex shrink-0 rounded-full bg-[var(--color-primary-soft)] px-3 py-1.5 text-[11px] font-semibold-token text-[var(--color-primary)]">
           {enabledAccessCount(accesses)} de {accesses.length} habilitados
         </span>
       </div>

@@ -76,13 +76,13 @@ function AccessPermissions({
       {access.visiblePermissions.map((permission) => (
         <li
           key={permission.code}
-          className="flex items-center gap-2 text-[11.5px] text-[var(--color-text-secondary)]"
+          className="flex min-w-0 items-start gap-2 text-[11.5px] text-[var(--color-text-secondary)]"
         >
           <CheckCircle2
             className="h-3.5 w-3.5 shrink-0 text-[var(--color-success)]"
             strokeWidth={2.4}
           />
-          <span className="truncate">{permission.label}</span>
+          <span className="min-w-0 break-words">{permission.label}</span>
         </li>
       ))}
       <AdditionalPermissionCount count={remainingPermissions} />
@@ -149,8 +149,8 @@ export function AccessCard({
         transition={motion.transition}
         className={cn(
           getAccessToneClassName(access),
-          "group relative flex min-h-[286px] flex-col overflow-hidden rounded-[var(--radius-lg)] border",
-          "border-[var(--color-border)] bg-[var(--color-surface)] p-[18px]",
+          "group relative flex min-h-0 flex-col sm:min-h-[286px] overflow-hidden rounded-[var(--radius-lg)] border",
+          "border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-[18px]",
           "shadow-[var(--shadow-access-card)] transition-[border-color,box-shadow] duration-200",
           "hover:border-[var(--accent-color-border)] hover:shadow-[var(--shadow-card-hover)]",
         )}
@@ -181,11 +181,11 @@ export function AccessCard({
 
         <AccessPermissions access={access} remainingPermissions={remainingPermissions} />
 
-        <div className="mt-auto flex items-end justify-between gap-3 pt-3">
+        <div className="mt-auto flex flex-col items-stretch gap-2 pt-4 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
           <button
             type="button"
             onClick={onViewPermissions}
-            className="focus-ring rounded-sm text-[11.5px] font-semibold-token text-[var(--accent-color)] underline decoration-[var(--accent-color-decoration)] decoration-1 underline-offset-4 transition hover:opacity-80"
+            className="focus-ring inline-flex min-h-11 items-center rounded-sm text-[11.5px] font-semibold-token text-[var(--accent-color)] underline decoration-[var(--accent-color-decoration)] decoration-1 underline-offset-4 transition hover:opacity-80"
           >
             Ver permisos
           </button>
@@ -197,7 +197,7 @@ export function AccessCard({
             disabled={disabled || isEntering}
             aria-busy={isEntering}
             title={getNavigationLockTitle(isNavigationLocked, isEntering)}
-            className="min-w-[104px] text-[12px]"
+            className="w-full min-w-[104px] text-[12px] sm:w-auto"
           >
             <AccessButtonContent access={access} isEntering={isEntering} />
           </Button>
