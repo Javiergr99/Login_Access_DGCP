@@ -122,18 +122,19 @@ function normalizeAccess(access: AccessItem, definition: EcosystemAccessDefiniti
 }
 
 /**
- * Catálogo visual del Ecosistema Integral DGCP.
+ * Construye el catálogo visual únicamente con los sistemas
+ * reportados para el usuario autenticado.
  *
- * Las cinco aplicaciones se muestran siempre. El backend continúa siendo la
- * autoridad de autorización: cuando no reporta un acceso, la tarjeta queda
- * visible en estado restringido y no puede iniciar redirect-code.
+ * Los sistemas no autorizados no generan tarjetas.
+ * Los sistemas autorizados sin URL conservan su estado
+ * de pendiente de despliegue.
  */
 export function buildEcosystemAccessCatalog(rawAccesses: readonly RawAccess[]): AccessItem[] {
   const mappedAccesses = rawAccesses.map(mapAvailableAccess);
 
-  return ECOSYSTEM_ACCESS_DEFINITIONS.map((definition) => {
+  return ECOSYSTEM_ACCESS_DEFINITIONS.flatMap((definition) => {
     const access = mappedAccesses.find((candidate) => definition.sourceIds.includes(candidate.id));
 
-    return access ? normalizeAccess(access, definition) : restrictedAccess(definition);
+    return access ? [normalizeAccess(access, definition)] : [];
   });
 }

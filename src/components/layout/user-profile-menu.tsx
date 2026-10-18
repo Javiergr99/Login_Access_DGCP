@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Building2, ChevronDown, LogOut, Mail, ShieldCheck, UserRound } from "lucide-react";
+import { Building2, ChevronDown, LogOut, Mail, UserRound } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -135,18 +135,6 @@ export function UserProfileMenu({ user }: UserProfileMenuProps) {
               <span className="block font-semibold-token">Mi perfil</span>
               <span className="block text-[11px] text-[var(--color-text-muted)]">
                 Consultar datos de la cuenta
-              </span>
-            </span>
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item className={itemClassName}>
-            <span className="grid h-8 w-8 place-items-center rounded-[9px] bg-[var(--color-success-soft)] text-[var(--color-success)] transition-transform duration-150 group-data-[highlighted]:scale-105">
-              <ShieldCheck className="h-4 w-4" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-semibold-token">Seguridad</span>
-              <span className="block text-[11px] text-[var(--color-text-muted)]">
-                2FA {user.is_2fa_enabled ? "activado" : "pendiente"}
               </span>
             </span>
           </DropdownMenu.Item>

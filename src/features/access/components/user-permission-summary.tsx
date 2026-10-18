@@ -17,7 +17,7 @@ export function UserPermissionSummary() {
 
   return (
     <section
-      className="flex min-h-[78px] flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3.5 shadow-[var(--shadow-user-summary)] sm:flex-row sm:items-center"
+      className="flex min-h-[78px] items-start gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-3.5 shadow-[var(--shadow-user-summary)] sm:items-center sm:px-4"
       aria-label="Resumen del usuario autenticado"
     >
       <UserAvatar name={displayName} className="h-11 w-11 text-[11px]" />
@@ -46,12 +46,12 @@ export function UserPermissionSummary() {
         </div>
 
         <div className="mt-1.5 grid gap-x-0 gap-y-1.5 text-[12px] text-[var(--color-text-secondary)] md:grid-cols-[auto_minmax(0,1fr)_auto_auto] md:items-center">
-          <span className="truncate md:pr-4">{user.correo_electronico}</span>
-          <span className="truncate md:border-l md:border-[var(--color-border)] md:px-4">
+          <span className="min-w-0 break-all md:truncate md:pr-4">{user.correo_electronico}</span>
+          <span className="min-w-0 break-words md:border-l md:border-[var(--color-border)] md:px-4">
             {user.instancia?.nombre ?? "Sin instancia asignada"}
           </span>
           <span className="md:border-l md:border-[var(--color-border)] md:px-4">
-            CURP: {user.curp}
+            CURP: •••• {user.curp.slice(-4)}
           </span>
           <span className="md:border-l md:border-[var(--color-border)] md:pl-4">
             2FA: {user.is_2fa_enabled ? "Activado" : "Pendiente"}

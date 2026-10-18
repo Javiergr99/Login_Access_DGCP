@@ -44,7 +44,7 @@ export function PermissionDialog({
         <dl className="grid grid-cols-1 gap-3 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] p-3.5 text-sm sm:grid-cols-2 sm:gap-4 sm:p-4">
           <div className="min-w-0">
             <dt className="text-xs font-semibold-token text-[var(--color-text-muted)]">Área</dt>
-            <dd className="mt-1 truncate font-semibold-token text-[var(--color-text-primary)]">
+            <dd className="mt-1 break-words font-semibold-token text-[var(--color-text-primary)]">
               {access.title}
             </dd>
           </div>
