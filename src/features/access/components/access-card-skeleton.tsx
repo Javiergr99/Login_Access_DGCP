@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function AccessCardSkeleton() {
   return (
-    <div className="min-h-0 rounded- sm:min-h-[286px][var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-[18px] shadow-[var(--shadow-access-card)]">
+    <div className="min-h-0 rounded-[var(--radius-lg)] sm:min-h-[286px] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-[18px] shadow-[var(--shadow-access-card)]">
       <div className="flex items-start justify-between">
         <Skeleton className="h-8 w-8 rounded-[9px]" />
         <Skeleton className="h-5 w-24 rounded-full" />
