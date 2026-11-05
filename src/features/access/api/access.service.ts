@@ -1,4 +1,5 @@
 import { httpClient } from "@/api/http-client";
+import { resolveAgendaAccess } from "@/features/access/api/agenda-access";
 import type {
   AppAction,
   AppGroup,
@@ -132,23 +133,17 @@ export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAcces
     });
   }
 
-  const hasControlAgendaAccess = hasSuperAdmin || hasGroup(user, "CONTROL_AGENDA_NACIONAL");
+  const agendaAccess = resolveAgendaAccess(user);
 
-  if (hasControlAgendaAccess) {
-    const controlAgendaActions = groupOrSuperAdminActions(
-      user,
-      "CONTROL_AGENDA_NACIONAL",
-      hasSuperAdmin,
-    );
-
+  if (agendaAccess) {
     accesses.push({
       id: "control-agenda-nacional",
       target_app: "CONTROL_AGENDA_NACIONAL",
       name: "Control Agenda Nacional",
       description:
         "Consulte y gestione la agenda nacional y las actividades institucionales autorizadas.",
-      access_level: hasSuperAdmin ? "full" : "limited",
-      permissions: controlAgendaActions,
+      access_level: agendaAccess.accessLevel,
+      permissions: agendaAccess.permissions,
       order: 4,
       target_url: getRedirectDestination("controlAgendaNacional"),
     });

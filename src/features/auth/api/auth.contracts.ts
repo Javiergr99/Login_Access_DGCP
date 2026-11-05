@@ -107,7 +107,13 @@ export type AppAction =
   | "VER_ESTADISTICAS_POR_PERIODO"
   | "GENERAR_EXCEL_FORMATO_INDIVIDUAL"
   | "GENERAR_EXCEL_FORMATOS_CONSOLIDADO"
-  | "EXPORTAR_DATOS_FORMATOS";
+  | "EXPORTAR_DATOS_FORMATOS"
+  | "VER_ACCIONES_SEMAFORO"
+  | "CREAR_ACCION_SEMAFORO"
+  | "EDITAR_ACCION_SEMAFORO"
+  | "ELIMINAR_ACCION_SEMAFORO"
+  | "VER_DASHBOARD_SEMAFORO"
+  | "ADMINISTRAR_TODO_SEMAFORO";
 
 export interface EstatusUsuario {
   id: number;
@@ -140,6 +146,11 @@ export interface GrupoUsuario {
   modulos: ModuloUsuario[];
 }
 
+export interface AccesoSistema {
+  codigo: string;
+  grupos_autorizados: string[];
+}
+
 export interface UsuarioAutenticado {
   id: string;
   nombre: string;
@@ -159,6 +170,8 @@ export interface UsuarioAutenticado {
   permisos: {
     grupos: GrupoUsuario[];
   };
+  /** Campo aditivo de Auth; ausente en versiones anteriores o mocks. */
+  accesos_sistemas?: AccesoSistema[];
 }
 
 /** Alias conservado para evitar romper componentes existentes. */

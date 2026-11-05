@@ -8,7 +8,12 @@ export function useAvailableAccesses() {
   const user = useAuthStore((state) => state.user);
 
   return useQuery({
-    queryKey: [...accessKeys.available(), user?.id ?? "anonymous"],
+    queryKey: [
+      ...accessKeys.available(),
+      user?.id ?? "anonymous",
+      JSON.stringify(user?.permisos?.grupos ?? []),
+      JSON.stringify(user?.accesos_sistemas ?? []),
+    ],
     queryFn: () => (user ? buildAvailableAccesses(user) : []),
     enabled: Boolean(user),
     staleTime: Number.POSITIVE_INFINITY,
