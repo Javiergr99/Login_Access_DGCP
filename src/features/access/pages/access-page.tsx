@@ -12,6 +12,10 @@ import { AccessCardSkeleton } from "@/features/access/components/access-card-ske
 import { PermissionDialog } from "@/features/access/components/permission-dialog";
 import { UserPermissionSummary } from "@/features/access/components/user-permission-summary";
 import { useAvailableAccesses } from "@/features/access/hooks/use-available-accesses";
+import { useAccessPermissionRefresh } from "@/features/access/hooks/use-access-permission-refresh";
+import { buildAvailableAccesses } from "@/features/access/api/access.service";
+import { authService } from "@/features/auth/api/auth.service";
+import { useAuthStore } from "@/features/auth/model/auth.store";
 import { useRedirectCode } from "@/features/access/hooks/use-redirect-code";
 import {
   mapAccessEntryError,
@@ -64,6 +68,19 @@ function useAccessNavigation() {
       }
 
       normalizedDestination = normalizeRedirectUrl(access.target_url);
+
+      if (!env.enableMocks) {
+        // Preflight obligatorio: no confiar en una tarjeta guardada en Zustand.
+        const freshUser = await authService.getCurrentUser();
+        useAuthStore.getState().setAuthenticatedUser(freshUser);
+        const stillAllowed = buildAvailableAccesses(freshUser).some(
+          (candidate) => candidate.target_app === access.target_app,
+        );
+        if (!stillAllowed) {
+          throw new Error("Los permisos del sistema cambiaron. Actualiza tus accesos.");
+        }
+      }
+
       if (env.enableMocks) {
         window.location.assign(normalizedDestination);
         return;
@@ -286,6 +303,7 @@ function AccessPageHeader() {
 }
 
 export function AccessPage() {
+  useAccessPermissionRefresh();
   const reduceMotion = useReducedMotion();
   const accessQuery = useAvailableAccesses();
   const accesses = useMemo(

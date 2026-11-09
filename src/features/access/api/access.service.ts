@@ -32,25 +32,36 @@ function groupActions(user: UsuarioAutenticado, groupName: AppGroup): AppAction[
   return actionsFromGroups(user.permisos.grupos.filter((group) => group.nombre === groupName));
 }
 
-function groupOrSuperAdminActions(
+// Solo las acciones funcionales explícitas habilitan tarjetas.
+// SUPER_ADMIN es administrativo; no concede Mesa ni Formatos por sí mismo.
+const MESA_FUNCTIONAL_ACTIONS = new Set<AppAction>([
+  "VER_BITACORA", "CREAR_BITACORA", "ACTUALIZAR_BITACORA", "ELIMINAR_BITACORA",
+  "SUBIR_ARCHIVO_BITACORA", "VER_DASHBOARD", "GENERAR_REPORTE_EXCEL", "GENERAR_REPORTE_PDF",
+]);
+const FORMATOS_FUNCTIONAL_ACTIONS = new Set<AppAction>([
+  "CAPTURAR_FORMATO_ATENCIONES", "VER_MIS_FORMATOS_ATENCIONES", "VER_FORMATO_PROPIO",
+  "DESCARGAR_COMPROBANTE_FORMATO", "ACTUALIZAR_FORMATO_DEVUELTO",
+  "VER_FORMATOS_RECIBIDOS", "VER_DETALLE_FORMATO", "INICIAR_REVISION_FORMATO",
+  "DEVOLVER_FORMATO_CORRECCION", "VALIDAR_FORMATO_ATENCIONES",
+  "ELIMINAR_FORMATO_ATENCIONES", "VER_DASHBOARD_FORMATOS",
+  "VER_ESTADISTICAS_POR_ESTADO", "VER_ESTADISTICAS_POR_MUNICIPIO",
+  "VER_ESTADISTICAS_POR_INDICADOR", "VER_ESTADISTICAS_POR_PERIODO",
+  "GENERAR_EXCEL_FORMATO_INDIVIDUAL", "GENERAR_EXCEL_FORMATOS_CONSOLIDADO",
+  "EXPORTAR_DATOS_FORMATOS",
+]);
+
+function functionalGroupActions(
   user: UsuarioAutenticado,
   groupName: AppGroup,
-  hasSuperAdmin: boolean,
+  allowed: ReadonlySet<AppAction>,
 ): AppAction[] {
-  const actions = groupActions(user, groupName);
-
-  if (actions.length > 0) {
-    return actions;
-  }
-
-  return hasSuperAdmin ? ["SUPER_ADMIN"] : [];
+  return groupActions(user, groupName).filter((action) => allowed.has(action));
 }
 
 function levelForMesaAyuda(actions: Set<AppAction>): AccessLevel {
   if (
     actions.has("CREAR_BITACORA") ||
-    actions.has("ACTUALIZAR_BITACORA") ||
-    actions.has("SUPER_ADMIN")
+    actions.has("ACTUALIZAR_BITACORA")
   ) {
     return "full";
   }
@@ -61,8 +72,7 @@ function levelForMesaAyuda(actions: Set<AppAction>): AccessLevel {
 function levelForFormatos(actions: Set<AppAction>): AccessLevel {
   if (
     actions.has("VALIDAR_FORMATO_ATENCIONES") ||
-    actions.has("VER_FORMATOS_RECIBIDOS") ||
-    actions.has("SUPER_ADMIN")
+    actions.has("VER_FORMATOS_RECIBIDOS")
   ) {
     return "full";
   }
@@ -79,9 +89,9 @@ export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAcces
   const allActions = new Set(actionsFromGroups(user.permisos.grupos));
   const hasSuperAdmin = allActions.has("SUPER_ADMIN");
 
-  const mesaActions = groupOrSuperAdminActions(user, "MESA_AYUDA", hasSuperAdmin);
+  const mesaActions = functionalGroupActions(user, "MESA_AYUDA", MESA_FUNCTIONAL_ACTIONS);
 
-  const formatosActions = groupOrSuperAdminActions(user, "FORMATOS_ATENCIONES", hasSuperAdmin);
+  const formatosActions = functionalGroupActions(user, "FORMATOS_ATENCIONES", FORMATOS_FUNCTIONAL_ACTIONS);
 
   if (mesaActions.length > 0) {
     accesses.push({
@@ -111,14 +121,10 @@ export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAcces
     });
   }
 
-  const hasDirectorioAccess = hasSuperAdmin || hasGroup(user, "DIRECTORIO_PROCURADORES");
+  const hasDirectorioAccess = hasGroup(user, "DIRECTORIO_PROCURADORES");
 
   if (hasDirectorioAccess) {
-    const directorioActions = groupOrSuperAdminActions(
-      user,
-      "DIRECTORIO_PROCURADORES",
-      hasSuperAdmin,
-    );
+    const directorioActions = groupActions(user, "DIRECTORIO_PROCURADORES");
 
     accesses.push({
       id: "directorio-procuradores",
@@ -126,7 +132,7 @@ export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAcces
       name: "Directorio de Procuradores",
       description:
         "Administre la información institucional de procuradores, directores, asistentes y coordinaciones jurídicas.",
-      access_level: hasSuperAdmin ? "full" : "limited",
+      access_level: "limited",
       permissions: directorioActions,
       order: 3,
       target_url: getRedirectDestination("directorioProcuradores"),
