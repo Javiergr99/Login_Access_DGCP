@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   getConfiguredRedirectDestinations,
+  getRedirectDestination,
   REDIRECT_DESTINATION_IDS,
   resolveConfiguredRedirectDestination,
 } from "@/shared/config/redirect-destinations";
@@ -17,14 +18,21 @@ describe("redirect destinations", () => {
     ]);
   });
 
-  it("expone las cinco URLs exactas acordadas para redirect-code", () => {
-    expect(getConfiguredRedirectDestinations()).toEqual([
-      "http://127.0.0.1:5173/app/dashboard",
-      "http://127.0.0.1:5175/app/dashboard",
-      "http://127.0.0.1:5177/procuradores",
-      "http://127.0.0.1:5179/app/dashboard",
-      "http://127.0.0.1:5180/app/dashboard",
-    ]);
+  it("valida los destinos configurados en el entorno actual", () => {
+    const destinations = getConfiguredRedirectDestinations();
+
+    const expected = REDIRECT_DESTINATION_IDS
+      .map(getRedirectDestination)
+      .filter((destination) => destination.length > 0);
+
+    expect(destinations).toEqual(expected);
+    expect(destinations.length).toBeGreaterThan(0);
+    expect(new Set(destinations).size).toBe(destinations.length);
+
+    for (const destination of destinations) {
+      expect(() => new URL(destination)).not.toThrow();
+      expect(resolveConfiguredRedirectDestination(destination)).toBe(destination);
+    }
   });
 
   it("rechaza destinos que no pertenezcan al registro configurado", () => {

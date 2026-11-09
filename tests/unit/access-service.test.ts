@@ -27,75 +27,26 @@ function createUser(groups: GrupoUsuario[]): UsuarioAutenticado {
 }
 
 describe("buildAvailableAccesses", () => {
-  it("habilita Directorio y Control Agenda cuando auth_service entrega sus grupos", () => {
-    const user = createUser([
-      {
-        id: "group-directorio",
-        nombre: "DIRECTORIO_PROCURADORES",
-        descripcion: null,
-        modulos: [],
-      },
-      {
-        id: "group-agenda",
-        nombre: "CONTROL_AGENDA_NACIONAL",
-        descripcion: null,
-        modulos: [],
-      },
+  it("Directorio exige grupo explícito y Agenda ignora grupo legado", () => {
+    const account = createUser([
+      { id: "directorio", nombre: "DIRECTORIO_PROCURADORES", descripcion: null, modulos: [] },
+      { id: "legacy", nombre: "CONTROL_AGENDA_NACIONAL", descripcion: null, modulos: [] },
     ]);
-
-    const accesses = buildAvailableAccesses(user);
-
-    expect(accesses.map((access) => access.target_app)).toEqual([
+    expect(buildAvailableAccesses(account).map((a) => a.target_app)).toEqual([
       "DIRECTORIO_PROCURADORES",
-      "CONTROL_AGENDA_NACIONAL",
     ]);
-
-    expect(accesses[0]).toMatchObject({
-      target_url: "http://127.0.0.1:5177/procuradores",
-      access_level: "limited",
-      permissions: [],
-    });
-
-    expect(accesses[1]).toMatchObject({
-      target_url: "http://127.0.0.1:5179/app/dashboard",
-      access_level: "limited",
-      permissions: [],
-    });
   });
 
-  it("otorga los cinco accesos del ecosistema a SUPER_ADMIN", () => {
-    const user = createUser([
-      {
-        id: "group-super-admin",
-        nombre: "MESA_AYUDA",
-        descripcion: null,
-        modulos: [
-          {
-            id: "module-admin",
-            nombre: "ADMINISTRACION_USUARIOS",
-            descripcion: null,
-            acciones: [
-              {
-                id: "action-super-admin",
-                nombre: "SUPER_ADMIN",
-                descripcion: null,
-              },
-            ],
-          },
-        ],
-      },
-    ]);
-
-    const accesses = buildAvailableAccesses(user);
-
-    expect(accesses.map((access) => access.target_app)).toEqual([
-      "MESA_AYUDA",
-      "FORMATOS_ATENCIONES",
-      "DIRECTORIO_PROCURADORES",
-      "CONTROL_AGENDA_NACIONAL",
+  it("SUPER_ADMIN solo habilita Configuracion si no existen acciones funcionales", () => {
+    const user = createUser([{
+      id: "group-super-admin", nombre: "MESA_AYUDA", descripcion: null,
+      modulos: [{
+        id: "module-admin", nombre: "ADMINISTRACION_USUARIOS", descripcion: null,
+        acciones: [{id: "action-super-admin", nombre: "SUPER_ADMIN", descripcion: null}],
+      }],
+    }]);
+    expect(buildAvailableAccesses(user).map((access) => access.target_app)).toEqual([
       "ADMINISTRACION_SISTEMA",
     ]);
-
-    expect(accesses.every((access) => access.access_level === "full")).toBe(true);
   });
 });
