@@ -121,23 +121,36 @@ httpClient.interceptors.response.use(
     const config = axiosError.config as RetryableRequestConfig | undefined;
     const status = axiosError.response?.status;
 
+    // Rechazar una sesion si el token renovado tambien recibe 401.
+    if (status === 401 && config?._authRetry) {
+      authTokenStorage.clear();
+      notifySessionExpired();
+      return Promise.reject(normalizeApiError(error));
+    }
+
     if (status === 401 && config && shouldAttemptRefresh(config)) {
       config._authRetry = true;
 
       try {
         await refreshSessionWithCookie();
+
         const accessToken = authTokenStorage.getAccessToken();
 
         if (!accessToken) {
-          throw new Error("La renovación no devolvió un access token.");
+          throw new Error("La renovaci?n no devolvi? un access token.");
         }
 
         config.headers.Authorization = `Bearer ${accessToken}`;
-        return await httpClient(config);
       } catch {
+        // Solo falla la renovacion de la sesion.
         authTokenStorage.clear();
         notifySessionExpired();
+        return Promise.reject(normalizeApiError(error));
       }
+
+      // Los errores del reintento se procesan por separado.
+      // Un 403, 500 o error de red no debe cerrar la sesion.
+      return httpClient(config);
     }
 
     return Promise.reject(normalizeApiError(error));

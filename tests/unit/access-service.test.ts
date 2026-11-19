@@ -38,13 +38,21 @@ describe("buildAvailableAccesses", () => {
   });
 
   it("SUPER_ADMIN solo habilita Configuracion si no existen acciones funcionales", () => {
-    const user = createUser([{
-      id: "group-super-admin", nombre: "MESA_AYUDA", descripcion: null,
-      modulos: [{
-        id: "module-admin", nombre: "ADMINISTRACION_USUARIOS", descripcion: null,
-        acciones: [{id: "action-super-admin", nombre: "SUPER_ADMIN", descripcion: null}],
-      }],
-    }]);
+    const user = createUser([
+      {
+        id: "group-super-admin",
+        nombre: "CONFIGURACION",
+        descripcion: null,
+        modulos: [
+          {
+            id: "module-admin",
+            nombre: "ADMINISTRACION_USUARIOS",
+            descripcion: null,
+            acciones: [{ id: "action-super-admin", nombre: "SUPER_ADMIN", descripcion: null }],
+          },
+        ],
+      },
+    ]);
     expect(buildAvailableAccesses(user).map((access) => access.target_app)).toEqual([
       "ADMINISTRACION_SISTEMA",
     ]);

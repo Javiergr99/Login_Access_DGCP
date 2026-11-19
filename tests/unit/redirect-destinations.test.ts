@@ -21,9 +21,9 @@ describe("redirect destinations", () => {
   it("valida los destinos configurados en el entorno actual", () => {
     const destinations = getConfiguredRedirectDestinations();
 
-    const expected = REDIRECT_DESTINATION_IDS
-      .map(getRedirectDestination)
-      .filter((destination) => destination.length > 0);
+    const expected = REDIRECT_DESTINATION_IDS.map(getRedirectDestination).filter(
+      (destination) => destination.length > 0,
+    );
 
     expect(destinations).toEqual(expected);
     expect(destinations.length).toBeGreaterThan(0);

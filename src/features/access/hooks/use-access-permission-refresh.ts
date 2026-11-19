@@ -15,9 +15,12 @@ export function useAccessPermissionRefresh(): void {
 
     const sync = async () => {
       if (
-        !alive || inFlight || document.visibilityState !== "visible" ||
+        !alive ||
+        inFlight ||
+        document.visibilityState !== "visible" ||
         useAuthStore.getState().sessionStatus !== "authenticated"
-      ) return;
+      )
+        return;
       inFlight = true;
       try {
         const user = await authService.getCurrentUser();
@@ -30,7 +33,9 @@ export function useAccessPermissionRefresh(): void {
       }
     };
 
-    const onVisible = () => { void sync(); };
+    const onVisible = () => {
+      void sync();
+    };
     window.addEventListener("focus", onVisible);
     document.addEventListener("visibilitychange", onVisible);
     const timer = window.setInterval(onVisible, 30_000);
