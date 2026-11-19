@@ -1,8 +1,4 @@
-import type {
-  AppAction,
-  GrupoUsuario,
-  UsuarioAutenticado,
-} from "../../auth/api/auth.contracts";
+import type { AppAction, GrupoUsuario, UsuarioAutenticado } from "../../auth/api/auth.contracts";
 const AGENDA_CODE = "CONTROL_AGENDA_NACIONAL";
 
 const CRUD_ACTIONS = [
@@ -47,8 +43,12 @@ function validatedActions(group: GrupoUsuario): AppAction[] {
 /** The canonical Auth access is mandatory; groups or SUPER_ADMIN alone never grant Agenda. */
 export function resolveAgendaAccess(user: UsuarioAutenticado): AgendaAccess | null {
   const canonical = user.accesos_sistemas?.find((entry) => entry.codigo === AGENDA_CODE);
-  if (!canonical || !Array.isArray(canonical.grupos_autorizados) ||
-      !canonical.grupos_autorizados.includes("SEMAFORO")) return null;
+  if (
+    !canonical ||
+    !Array.isArray(canonical.grupos_autorizados) ||
+    !canonical.grupos_autorizados.includes("SEMAFORO")
+  )
+    return null;
   const groups = user.permisos?.grupos;
   if (!Array.isArray(groups)) return null;
 
@@ -60,11 +60,12 @@ export function resolveAgendaAccess(user: UsuarioAutenticado): AgendaAccess | nu
   if (effectiveActions.size === 0) return null;
 
   const permissions = Array.from(effectiveActions);
-  const canWrite = permissions.some((permission) =>
-    permission === "CREAR_ACCION_SEMAFORO" ||
-    permission === "EDITAR_ACCION_SEMAFORO" ||
-    permission === "ELIMINAR_ACCION_SEMAFORO" ||
-    permission === "ADMINISTRAR_TODO_SEMAFORO",
+  const canWrite = permissions.some(
+    (permission) =>
+      permission === "CREAR_ACCION_SEMAFORO" ||
+      permission === "EDITAR_ACCION_SEMAFORO" ||
+      permission === "ELIMINAR_ACCION_SEMAFORO" ||
+      permission === "ADMINISTRAR_TODO_SEMAFORO",
   );
 
   // "full" would suggest implicit deletion; administrative action alone does not grant that.

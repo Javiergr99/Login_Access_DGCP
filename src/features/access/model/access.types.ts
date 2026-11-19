@@ -1,9 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 
-import type { AppAction, AppGroup } from "@/features/auth/api/auth.contracts";
+import type { AppAction } from "@/features/auth/api/auth.contracts";
 
 export type AccessTarget =
-  AppGroup | "DIRECTORIO_PROCURADORES" | "CONTROL_AGENDA_NACIONAL" | "ADMINISTRACION_SISTEMA";
+  | "MESA_AYUDA"
+  | "FORMATOS_ATENCIONES"
+  | "DIRECTORIO_PROCURADORES"
+  | "CONTROL_AGENDA_NACIONAL"
+  | "ADMINISTRACION_SISTEMA";
 export type AccessLevel = "full" | "limited" | "read_only" | "restricted";
 export type AccessTone = "blue" | "violet" | "emerald" | "amber";
 

@@ -35,18 +35,34 @@ function groupActions(user: UsuarioAutenticado, groupName: AppGroup): AppAction[
 // Solo las acciones funcionales explícitas habilitan tarjetas.
 // SUPER_ADMIN es administrativo; no concede Mesa ni Formatos por sí mismo.
 const MESA_FUNCTIONAL_ACTIONS = new Set<AppAction>([
-  "VER_BITACORA", "CREAR_BITACORA", "ACTUALIZAR_BITACORA", "ELIMINAR_BITACORA",
-  "SUBIR_ARCHIVO_BITACORA", "VER_DASHBOARD", "GENERAR_REPORTE_EXCEL", "GENERAR_REPORTE_PDF",
+  "VER_BITACORA",
+  "CREAR_BITACORA",
+  "ACTUALIZAR_BITACORA",
+  "ELIMINAR_BITACORA",
+  "SUBIR_ARCHIVO_BITACORA",
+  "VER_DASHBOARD",
+  "GENERAR_REPORTE_EXCEL",
+  "GENERAR_REPORTE_PDF",
 ]);
 const FORMATOS_FUNCTIONAL_ACTIONS = new Set<AppAction>([
-  "CAPTURAR_FORMATO_ATENCIONES", "VER_MIS_FORMATOS_ATENCIONES", "VER_FORMATO_PROPIO",
-  "DESCARGAR_COMPROBANTE_FORMATO", "ACTUALIZAR_FORMATO_DEVUELTO",
-  "VER_FORMATOS_RECIBIDOS", "VER_DETALLE_FORMATO", "INICIAR_REVISION_FORMATO",
-  "DEVOLVER_FORMATO_CORRECCION", "VALIDAR_FORMATO_ATENCIONES",
-  "ELIMINAR_FORMATO_ATENCIONES", "VER_DASHBOARD_FORMATOS",
-  "VER_ESTADISTICAS_POR_ESTADO", "VER_ESTADISTICAS_POR_MUNICIPIO",
-  "VER_ESTADISTICAS_POR_INDICADOR", "VER_ESTADISTICAS_POR_PERIODO",
-  "GENERAR_EXCEL_FORMATO_INDIVIDUAL", "GENERAR_EXCEL_FORMATOS_CONSOLIDADO",
+  "CAPTURAR_FORMATO_ATENCIONES",
+  "VER_MIS_FORMATOS_ATENCIONES",
+  "VER_FORMATO_PROPIO",
+  "DESCARGAR_COMPROBANTE_FORMATO",
+  "ACTUALIZAR_FORMATO_DEVUELTO",
+  "VER_FORMATOS_RECIBIDOS",
+  "VER_DETALLE_FORMATO",
+  "INICIAR_REVISION_FORMATO",
+  "DEVOLVER_FORMATO_CORRECCION",
+  "VALIDAR_FORMATO_ATENCIONES",
+  "ELIMINAR_FORMATO_ATENCIONES",
+  "VER_DASHBOARD_FORMATOS",
+  "VER_ESTADISTICAS_POR_ESTADO",
+  "VER_ESTADISTICAS_POR_MUNICIPIO",
+  "VER_ESTADISTICAS_POR_INDICADOR",
+  "VER_ESTADISTICAS_POR_PERIODO",
+  "GENERAR_EXCEL_FORMATO_INDIVIDUAL",
+  "GENERAR_EXCEL_FORMATOS_CONSOLIDADO",
   "EXPORTAR_DATOS_FORMATOS",
 ]);
 
@@ -59,10 +75,7 @@ function functionalGroupActions(
 }
 
 function levelForMesaAyuda(actions: Set<AppAction>): AccessLevel {
-  if (
-    actions.has("CREAR_BITACORA") ||
-    actions.has("ACTUALIZAR_BITACORA")
-  ) {
+  if (actions.has("CREAR_BITACORA") || actions.has("ACTUALIZAR_BITACORA")) {
     return "full";
   }
 
@@ -70,10 +83,7 @@ function levelForMesaAyuda(actions: Set<AppAction>): AccessLevel {
 }
 
 function levelForFormatos(actions: Set<AppAction>): AccessLevel {
-  if (
-    actions.has("VALIDAR_FORMATO_ATENCIONES") ||
-    actions.has("VER_FORMATOS_RECIBIDOS")
-  ) {
+  if (actions.has("VALIDAR_FORMATO_ATENCIONES") || actions.has("VER_FORMATOS_RECIBIDOS")) {
     return "full";
   }
 
@@ -86,12 +96,16 @@ function levelForFormatos(actions: Set<AppAction>): AccessLevel {
 
 export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAccess[] {
   const accesses: AvailableAccess[] = [];
-  const allActions = new Set(actionsFromGroups(user.permisos.grupos));
-  const hasSuperAdmin = allActions.has("SUPER_ADMIN");
+  const configurationActions = new Set(groupActions(user, "CONFIGURACION"));
+  const hasSuperAdmin = configurationActions.has("SUPER_ADMIN");
 
   const mesaActions = functionalGroupActions(user, "MESA_AYUDA", MESA_FUNCTIONAL_ACTIONS);
 
-  const formatosActions = functionalGroupActions(user, "FORMATOS_ATENCIONES", FORMATOS_FUNCTIONAL_ACTIONS);
+  const formatosActions = functionalGroupActions(
+    user,
+    "FORMATOS_ATENCIONES",
+    FORMATOS_FUNCTIONAL_ACTIONS,
+  );
 
   if (mesaActions.length > 0) {
     accesses.push({
@@ -155,10 +169,11 @@ export function buildAvailableAccesses(user: UsuarioAutenticado): AvailableAcces
     });
   }
 
-  const administrationActions = Array.from(allActions).filter((action) =>
+  const administrationActions = Array.from(configurationActions).filter((action) =>
     [
       "SUPER_ADMIN",
       "ADMINISTRAR_USUARIOS",
+      "VER_USUARIOS",
       "VER_CATALOGO_PERMISOS",
       "ASIGNAR_GRUPOS_USUARIO",
       "ASIGNAR_MODULOS_USUARIO",
